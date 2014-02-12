@@ -1,0 +1,60 @@
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+<web-app>
+
+
+  <servlet>
+    <servlet-name>OpenServlet</servlet-name>
+    <servlet-class>com.iborg.share.OpenServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>WriteServlet</servlet-name>
+    <servlet-class>com.iborg.share.WriteServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>ReadServlet</servlet-name>
+    <servlet-class>com.iborg.share.ReadServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>AcceptServlet</servlet-name>
+    <servlet-class>com.iborg.share.AcceptServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>CloseServlet</servlet-name>
+    <servlet-class>com.iborg.share.CloseServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>AcceptServlet</servlet-name>
+    <url-pattern>/accept</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>WriteServlet</servlet-name>
+    <url-pattern>/write</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>OpenServlet</servlet-name>
+    <url-pattern>/open</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>ReadServlet</servlet-name>
+    <url-pattern>/read</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>CloseServlet</servlet-name>
+    <url-pattern>/close</url-pattern>
+  </servlet-mapping>
+
+</web-app>

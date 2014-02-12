@@ -1,0 +1,303 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (Win98; U) [Netscape]">
+   <title>Robo User Guide</title>
+<!--
+  Author>Boris Galinsky
+-->
+</head>
+<body link="#0000FF" vlink="#800080" lang="EN-US" style="tab-interval:.5in">
+&nbsp;
+<center>
+<p><b><font size=+3>User Guide</font></b></center>
+
+<p>This document describes how to configure and run <b>Robo&trade;</b>.
+<br><br><b>Robo&trade;</b> consist of two modules – server and client. Server
+is a Java application that runs on a target computer. Client can run as either
+applet or application.
+<br><br>Server waits for client's connection, validates user's password, captures
+and sends screen, receives mouse and keyboard commands. Client displays
+screens captured by server and sends keystrokes and mouse events to its server.
+<br><br>In its current release <b>Robo&trade;</b> connection between server
+and client can be established via TCP/IP sockets or via HTTP tunneling
+protocol.
+<br><br>Distribution's robo directory contains robo.jar and Robo.cfg files.
+<br><br>Command to run the server is:
+<blockquote><b>java –classpath robo.jar com.iborg.robo.server.RoboServer
+[config-file]</b></blockquote>
+for client it is:
+<blockquote><b>java –classpath robo.jar com.iborg.robo.client.RoboClient
+[config-file]</b></blockquote>
+<br>config-file parameter is optional, in both cases it defaults to
+Robo.cfg. The same file can be used for both client and server.
+<br><br>Configuration file consists of comments and records with names and values.
+Comments start with “#” character. Names and values are separated by “=”.
+Robo is case-sensitive.
+<br><br>&nbsp;
+<center>
+<br><br><font size=+2><b>First thing first</b>.</font></center>
+
+<br><br>Running <b>Robo&trade;</b> or any other remote access program creates
+a potential security hole on a target computer. RoboServer protects access to the target
+computer with a password. The password is specified by “robo.password” field in Robo.cfg file.
+Please change this password field before running the server.
+<br><br>As a security precaution, RoboClient does not send user-entered
+password to RoboServer. Instead RoboServer sends RoboClient a challenge
+(a unique and random data) that is combined with user input. RoboClient
+uses this combination to compute a digest and only this digest (which is,
+technically, unique for each connection) is being transmitted. Even if such transmission is
+intercepted, it can not be used to login to user'r computer. This document
+will also later describe how to run both client and server using SSL.
+<br><br>&nbsp;
+<center>
+<br><br><b><font size=+2>Running Robo&trade; with TCP/IP (client as an application).</font></b></center>
+
+<br><br>Configuration file must contain these parameters:
+<br><br>robo.connectionType = tcp
+<br>robo.port = your-port-number
+<br>robo.host = your-hostname
+<br><br>These parameters are located under heading “connection via TCP/IP sockets”.
+It is probably a good idea to initally test-run both RoboServer and RoboClient
+on a target computer to verify that the system is functional.
+<br><br>When RoboServer starts, it prints its communication parameters. When
+RoboClient connects it pops out a small window for password entry. Once
+password is validated, a larger frame appears. Few seconds later, depending
+on both size of the target screen and a speed of the connection, it should
+display the content of he target screen. Update frequency depends on amount
+of change on target screen.
+<br><br>It takes time to adjust to using computer remotely. It is like running
+GUI on 8088 processor. It is important to slow down and wait for screen
+updates.
+<br><br>Three numbers on the bottom right of client’s frame show (going from
+right to left):
+<ol style='margin-top:0in' start=1 type=1>
+<li style="mso-list:l0 level1 lfo3;tab-stops:list .5in">
+Time in seconds since last update (this is the number that is changing
+rapidly).</li>
+
+<li style="mso-list:l0 level1 lfo3;tab-stops:list .5in">
+Time in seconds for the previous update.</li>
+
+<li style="mso-list:l0 level1 lfo3;tab-stops:list .5in">
+Average time for all updates.</li>
+</ol>
+These numbers, especially the first one, should be used as a guide on how
+quickly or slow to click, type, etc.
+<br><br>&nbsp;
+<center>
+<h1>
+<font size=+2>Use of Web Servers</font></h1></center>
+<br><br>The rest of configurations of <b>Robo&trade;</b> described in this document require a Web server.
+<br><br>HTTP tunneling approach uses an J2EE compliant servlet engine. So far,
+it’s been tested on Tomcat 4.X and Weblogic Server 6.1.
+<br><br>“share” directory of <b>Robo&trade;</b> distribution must be moved/copied
+to web app directory of an application server. In case of Tomcat it belongs
+under “webapps”, in case of Weblogic it should go under “applications”.
+<br><br>If a computer is accessing Web server via a proxy, proxyHost and proxyPort
+have to be specified on a command line or entered into Robo.cfg (omit –D
+in this case).
+<br><br>&nbsp;
+<center>
+<br><br><b><font size=+2>Running Robo&trade; with TCP/IP sockets (client
+as an applet).</font></b></center>
+
+<br><br>The distribution also contains RoboClientTcp.html file:
+
+<p style="mso-layout-grid-align:none;text-autospace:none">&lt;html>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;body>This
+is a connection through TCP socket.
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;br>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;applet
+code=com.iborg.robo.client.RoboClient.class codebase=. archive=roboClient.jar
+width=0 height=0>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;param name=cabbase
+value="roboClient.cab">
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;param name="robo.connectionType"
+value="tcp">
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;param name="robo.port"
+value="5000">
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/applet>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/body>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/html>
+<br><br>Notice “robo.port”. Its value must be the same as “robo.port” from Robo.cfg
+file.
+<br><br>Point your browser to <a href="http://your-server-hostname/share/RoboClientTcp.html">http://your-server-hostname/share/RoboClientTcp.html</a>.
+<br><br>HTTP protocol limits browser connection to the host that served applet's page. However, 
+with the use of a router it is possible to access multiple computers with this configuration. 
+Router can be programmed to redirect network trafic on port 80 (web server) to one computer, and 
+trafic on ports used by RoboServer to other ones.
+
+<br><br>&nbsp;
+<center>
+<br><br><b><font size=+2>Running Robo&trade; with HTTP tunneling (client
+as an application).</font></b></center>
+
+<br><br>This configuration can be used to connect to/from computers behind firewalls.
+<br><br><font color="red">A word of caution – this type of connection uses more network resources,
+is slower, and may cause tensions between users and network administration (not that it had not 
+been done before). Use it at your own risk.</font>
+<br><br>Robo.cfg must contains the following:
+<br><br>#
+<br># connection via web server
+<br>#
+<br>robo.connectionType = web
+<br>robo.connectionURL = http://your-server-hostname/share/
+<br>robo.acceptToken = your-connection-token
+<br><br>your-server-host-name is hostname for server running your application
+server. Set “acceptToken” to your favorite string (I use bg – my initials).
+<br>TCP/IP section should be commented out or deleted.
+<br>Once application servers are started, start RoboServer and then RoboClient.
+<br><b>It may take up to ONE MINUTE to get connected.</b>
+<br>&nbsp;
+<center>
+<br><br><b><font size=+2>Running Robo&trade; with HTTP tunneling (client
+as an applet).</font></b></center>
+
+<br><br>In this release <b>Robo&trade;</b> can only be run in single-user
+mode. What it means is that HTML file for RoboClient applet is static and
+contains all connection information. This is a distribution's RoboClient.html
+file:
+
+<p style="mso-layout-grid-align:none;text-autospace:none">&lt;html>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;body>
+<div style="mso-layout-grid-align:none;text-autospace:none">This is a connection
+through HTTP server.
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;br>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;applet
+code=com.iborg.robo.client.RoboClient.class codebase=. archive=roboClient.jar
+width=0 height=0>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;param name=cabbase
+value="roboClient.cab">
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;param name=robo.acceptToken
+value="bg">
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/applet>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/body>
+<div style="mso-layout-grid-align:none;text-autospace:none">&lt;/html>
+<br><br>Notice “robo.acceptToken”. Its value must be the same as “robo.acceptToken”
+from Robo.cfg file.
+<br><br>As of 11/14/2002 client has been successfully tested on IE Explorer
+version 5.X and higher and on Netscape 4.X.
+<br><br>Point your browser to <a href="http://your-server-hostname/share/RoboClient.html">http://your-server-hostname/share/RoboClient.html</a>.
+Applet should start and display login frame. Again, it may take up to one
+minute to connect. Multiple target computers can be supported by creating
+copies of RoboClient.html, and Robo.cfg files with different acceptToken
+fields.
+<br><br>&nbsp;
+<center>
+<h1>
+<font size=+2>Running Robo&trade; with SSL</font></h1></center>
+SSL can provide an extra security and communication encryption in <b>Robo&trade;</b>.
+Java has SSL support built in JDK 1.4 (in JSSE framework).
+<br><br>There are two “legs” of <b>Robo&trade;</b>&nbsp; 'communication:
+communication – between RoboServer to/from Web server and RoboClient to/from
+Web server.
+<br><br>Client applet uses browser’s facilities for communication. In this case,
+it is sufficient to point a browser to https URL instead of http, provided
+that site’s Web server supports it.
+<br><br>Server's SSL use also involves use of certificates. There are number of ways
+to get a certificate:
+<ol style='margin-top:0in' start=1 type=1>
+<li style="mso-list:l2 level1 lfo4;tab-stops:list .5in">
+Buy from certificate authority.</li>
+
+<li style="mso-list:l2 level1 lfo4;tab-stops:list .5in">
+Borrow from someone.</li>
+
+<li style="mso-list:l2 level1 lfo4;tab-stops:list .5in">
+Generate a self-signed certificate.</li>
+</ol>
+The rest of this chapter will deal with the later option with assumption of
+JDK 1.4 and Tomcat configuration.
+<br><br>Tomcat’s documentation says to run the following command:
+<br><blockquote><b>&lt;path>keytool -genkey -alias tomcat -keyalg RSA</b></blockquote>
+and specify a password value of "changeit", then uncomment the "SSL HTTP/1.1
+Connector" entry in <tt>conf/server.xml</tt> and tweak as necessary.
+<br><br>Next, examine keystore with the following command
+<br><blockquote>
+<div style="text-indent:.5in"><b>&lt;path>keytool -list -v</b></div>
+</blockquote>
+
+<br>At this point there should be an entry there with alias name “tomcat”.
+Following an example from JSSE Reference Guide, export tomcat certificate
+into a file
+<br><blockquote>
+<div style="text-indent:.5in"><b>&lt;path>keytool -export -alias tomcat
+-file tomcat.cer</b></div>
+</blockquote>
+
+<br>Import the certificate into a new truststore:
+<br><blockquote>
+<pre style="margin-right:1.5in"><b>&lt;path>keytool -import -alias tomcat -file tomcat.cer -keystore truststore</b></pre>
+</blockquote>
+
+<pre style="margin-right:1.5in">When it asks for a password - enter “trustword” and, of course, answer “yes” to whether to trust the certificate.</pre>
+
+<pre style="margin-right:1.5in">Change http to https in Robo.cfg.</pre>
+
+<pre style="margin-right:1.5in">Start RoboServer with this command:</pre>
+
+<blockquote>
+<pre style="margin-right:1.5in"><b>java -cp robo.jar -Djavax.net.ssl.trustStorePassword=trustword -Djavax.net.ssl.trustStore=truststore com.iborg.robo.server.RoboServer</b></pre>
+</blockquote>
+If it does not fit on one line rename truststore into something shorter
+or add these two entries into Robo.cfg:
+<div style="text-indent:.5in">javax.net.ssl.trustStorePassword = trustword
+<div style="text-indent:.5in">javax.net.ssl.trustStore = truststore
+<br><br>
+Then no command-line defines are necessary.
+<br><br>
+<center>
+<br><b><font size=+2>Client's "Advanced" dialog</font></b></center>
+
+<br><br>Most of the problems reported by RoboClient running in a browser environment
+ come from the lack of memory.
+If a browser you are using reports an error, first try reloading RoboClient and 
+while login in use "Advanced" dialog to slow down amount of data sent to the client. 
+Each screen update message includes number of "chunks" of pixels.
+"Maximum Pixels in a Chunk" field is set the number of pixels to be sent in 
+each chunk of data, "Maximum Transmission Size" limits the size of uncompressed 
+message. Initially both fields are set to "-1" - no limit. Setting max pixels to 10000
+and max transmission to 100000 sounds reasonable. It will slow down screen updates,
+but should get you going.
+
+
+<br><br>
+<center>
+<br><br><b><font size=+2>Few pointers</font></b></center>
+
+<br><br>Distribution also includes a troubleshooting tool – status.jsp. It lists
+current active HTTP tunneling connections and their communication status.
+Clients’ connections end with “:C” and servers’ with “:S”. The reset of
+the string for client-server pair is the same. It is especially useful
+for initial connection, when a user looks at an empty client frame and
+nothing seems to be working. Bytes written and read on both sides should
+tell the story.
+<br><br>Initial screen download should be in the area of 50-100K depending on
+target’s display resolution and size.
+<br><br>When Windows Power scheme is used and screen is off the initial screen
+download size is significantly higher. There are ways to deal with this:
+<br><br>&nbsp;
+<ol style='margin-top:0in' start=1 type=1>
+<li>
+Disable screen power management – user screen saver instead.</li>
+
+<li>
+If first option is not viable, do the following. After initial connection,
+move mouse inside the frame. This would “wake up” the screen on the other
+end. Close client’s frame and reload.</li>
+
+<li>
+Take a coffee brake and wait the initial download. Move mouse inside the
+frame anyway to get display card out of power save mode.</li>
+</ol>
+
+<center>
+<br><br><b><font size=+2>Comments or questions</font></b></center>
+
+<br><br>Send them to Boris Galinsky – <a href="" mailto:sanych@comcast.net>sanych@comcast.net</a>
+<br><br>&nbsp;
+
+</body>
+</html>
