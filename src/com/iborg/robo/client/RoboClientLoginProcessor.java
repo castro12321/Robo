@@ -95,6 +95,13 @@ public class RoboClientLoginProcessor extends Thread {
         }
     }
     
+    
+    private String getPassword(String host)
+    {
+
+    }
+    
+    
     public void login() {
         DataInputStream dis = new DataInputStream(is);
         long loginMask = 0;
@@ -102,6 +109,8 @@ public class RoboClientLoginProcessor extends Thread {
             loginMask = dis.readLong();
         } catch (Exception e) {
         }
+        
+        /*
         // create dialog
         final Dialog dialog = new Dialog(new Frame(), "Please enter the secret word", true);
         TextField textField = new TextField(48);
@@ -145,6 +154,9 @@ public class RoboClientLoginProcessor extends Thread {
         dialog.setVisible(true);
         
         String secret = textField.getText();
+        */
+        
+        String secret = getPassword(roboClient.host);
         try {
             try {
                 //java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("SHA-1");
