@@ -18,22 +18,22 @@ public class CommunicationManager {
     public static long OPEN_WAIT=60000L;
     
     //static HashMap accepted = new HashMap();
-    private static Map users = new HashMap();
-    private static Map currentSockets = new HashMap();
-    private static Map comBuffer = new HashMap();
+    private static Map<String, UserRecord> users = new HashMap<>();
+    private static Map<String, String> currentSockets = new HashMap<>();
+    private static Map<String, List<?>> comBuffer = new HashMap<>();
     
-    private static Map socketInfo = new HashMap();
+    private static Map<String, SocketInfo> socketInfo = new HashMap<String, SocketInfo>();
     
     private static Thread cleanupThread;
     static class Cleanup implements Runnable {
         public void run() {
-            Set toClose = new TreeSet();
+            Set<String> toClose = new TreeSet<String>();
             while(true) {
                 toClose.clear();
-                Map map = CommunicationManager.getCurrentSockets();
+                Map<String, String> map = CommunicationManager.getCurrentSockets();
                 long timeStamp = (new Date()).getTime();
-                Set keys = map.keySet();
-                Iterator iterator = keys.iterator();
+                Set<String> keys = map.keySet();
+                Iterator<String> iterator = keys.iterator();
                 while( iterator.hasNext()) {
                     String socketName = (String)iterator.next();
                     SocketInfo socketInfo = (SocketInfo) CommunicationManager.getSocketInfo().get(socketName);
@@ -66,20 +66,20 @@ public class CommunicationManager {
         cleanupThread.start();
     }
     
-    public static Map getUsers() {
+    public static Map<String, UserRecord> getUsers() {
         return users;
     }
     
-    public static Map getCurrentSockets() {
+    public static Map<String, String> getCurrentSockets() {
         return currentSockets;
     }
     
-    public static Map getSocketInfo() {
+    public static Map<String, SocketInfo> getSocketInfo() {
         return socketInfo;
     }
     
-    public static Set getUserShares(String userId) {
-        Set shares = null;
+    public static Set<String> getUserShares(String userId) {
+        Set<String> shares = null;
         UserRecord userRecord = (UserRecord) users.get(userId);
         
         if(userRecord != null) {
@@ -100,11 +100,11 @@ public class CommunicationManager {
         
         userRecord.advertised.add(key);
         
-        HashMap accepted = userRecord.accepted;
+        HashMap<String, List<String>> accepted = userRecord.accepted;
         
         Object o = accepted.get(key);
         if(o != null) {
-            List sockets = (List) o;
+            List<?> sockets = (List<?>) o;
             if(sockets.size() > 0) {
                 socket = (String)sockets.get(0);
                 synchronized(socket) {
@@ -126,12 +126,12 @@ public class CommunicationManager {
         UserRecord userRecord = (UserRecord) users.get(userId);
         
         if(userRecord != null) {
-            HashMap accepted = userRecord.accepted;
+            HashMap<String, List<String>> accepted = userRecord.accepted;
             
             synchronized(accepted) {
-                List sockets = (List) accepted.get(key);
+                List<String> sockets = (List<String>) accepted.get(key);
                 if(sockets == null) {
-                    sockets = new ArrayList();
+                    sockets = new ArrayList<>();
                 }
                 String socket = com.iborg.util.UniqueObject.createUniqueString();
                 String serverSocket = socket + "S";
@@ -159,8 +159,8 @@ public class CommunicationManager {
                         return null;
                     }
                 }
-                comBuffer.put(serverSocket, new ArrayList());
-                comBuffer.put(clientSocket, new ArrayList());
+                comBuffer.put(serverSocket, new ArrayList<Object>());
+                comBuffer.put(clientSocket, new ArrayList<Object>());
             }
         }
         return clientSocket;
@@ -177,7 +177,7 @@ public class CommunicationManager {
         
         Object o = currentSockets.get(socket);
         if(o != null) {
-            List messages = (List)comBuffer.get(o);
+            List<byte[]> messages = (List<byte[]>)comBuffer.get(o);
             if(messages == null) {
                 throw new IOException("Socket is being closed");
             }
@@ -204,7 +204,7 @@ public class CommunicationManager {
         byte [] data = null;
         Object o = currentSockets.get(socket);
         if(o != null) {
-            List messages = (List)comBuffer.get(socket);
+            List<?> messages = (List<?>)comBuffer.get(socket);
             if(messages.size() > 0) {
                 data = (byte [])messages.get(0);
                 messages.remove(0);
