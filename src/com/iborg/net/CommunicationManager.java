@@ -20,7 +20,7 @@ public class CommunicationManager {
     //static HashMap accepted = new HashMap();
     private static Map<String, UserRecord> users = new HashMap<>();
     private static Map<String, String> currentSockets = new HashMap<>();
-    private static Map<String, List<?>> comBuffer = new HashMap<>();
+    private static Map<String, ArrayList<byte[]>> comBuffer = new HashMap<>();
     
     private static Map<String, SocketInfo> socketInfo = new HashMap<String, SocketInfo>();
     
@@ -159,8 +159,8 @@ public class CommunicationManager {
                         return null;
                     }
                 }
-                comBuffer.put(serverSocket, new ArrayList<Object>());
-                comBuffer.put(clientSocket, new ArrayList<Object>());
+                comBuffer.put(serverSocket, new ArrayList<byte[]>());
+                comBuffer.put(clientSocket, new ArrayList<byte[]>());
             }
         }
         return clientSocket;

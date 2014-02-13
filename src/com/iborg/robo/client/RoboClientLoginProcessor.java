@@ -149,8 +149,8 @@ public class RoboClientLoginProcessor extends Thread {
             try {
                 //java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("SHA-1");
                 
-                Class classMessageDigest = Class.forName("java.security.MessageDigest");
-                Class [] getMethodParams = new Class[1];
+                Class<?> classMessageDigest = Class.forName("java.security.MessageDigest");
+                Class<?> [] getMethodParams = new Class[1];
                 getMethodParams[0] = String.class;
                 java.lang.reflect.Method method = classMessageDigest.getMethod("getInstance", getMethodParams);
                 Object [] methodParam = new Object[1];
