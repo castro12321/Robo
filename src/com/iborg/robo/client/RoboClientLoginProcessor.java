@@ -37,8 +37,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
@@ -98,7 +106,28 @@ public class RoboClientLoginProcessor extends Thread {
     
     private String getPassword(String host)
     {
-
+        try
+        {
+        	URL website = new URL("http://" + host + "/robo/password.txt");
+        	ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+	        rbc.read(buffer);
+	        String password = "";
+	        for(int i = 0; ; i++)
+	        {
+	        	char c = (char)buffer.get(i);
+	        	if(c == 0)
+	        		break;
+	        	password += c;
+	        }
+	        
+	        return password;
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     
