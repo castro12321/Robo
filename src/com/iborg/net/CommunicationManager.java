@@ -53,7 +53,7 @@ public class CommunicationManager {
                 }
                 
                 try {
-                    Thread.currentThread().sleep(60000L);
+                    Thread.sleep(60000L);
                 } catch (Exception e) {
                 }
             }

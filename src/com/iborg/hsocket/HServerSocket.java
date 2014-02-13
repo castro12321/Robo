@@ -52,8 +52,6 @@ public class HServerSocket implements IServerSocket {
     }
     
     public ISocket accept() {
-        byte [] input = new byte[80];
-        
         while (true) {
             try {
                 URL url = new URL(acceptSpec);
@@ -71,7 +69,7 @@ public class HServerSocket implements IServerSocket {
                 e.printStackTrace(System.err);
             }
             try {
-                Thread.currentThread().sleep(60000L);
+                Thread.sleep(60000L);
             } catch (Exception e) {
             }
             

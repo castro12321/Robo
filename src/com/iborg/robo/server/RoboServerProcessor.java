@@ -131,7 +131,7 @@ public class RoboServerProcessor extends Thread {
                             break;
                         case -1:
                             try {
-                                Thread.currentThread().sleep(1000);
+                                Thread.sleep(1000);
                             } catch (Exception e) {
                             }
                             break;
@@ -242,7 +242,6 @@ public class RoboServerProcessor extends Thread {
     }
     
     private void sendColorModel(DirectColorModel directColorModel) {
-        int pixelSize = directColorModel.getPixelSize();
         int redMask = directColorModel.getRedMask();
         int greenMask = directColorModel.getGreenMask();
         int blueMask = directColorModel.getBlueMask();

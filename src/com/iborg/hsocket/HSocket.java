@@ -71,7 +71,6 @@ public class HSocket implements ISocket {
     }
     
     private void open() throws IOException {
-        byte[] input = new byte[80];
         try {
             String openWithFill = openSpec + ":" + UniqueObject.createUniqueObject();
             URL url = new URL(openWithFill);
@@ -146,7 +145,7 @@ public class HSocket implements ISocket {
                 }
                 totalWritten += written;
                 try {
-                    Thread.currentThread().sleep(100);
+                    Thread.sleep(100);
                 } catch (Exception e) {
                 }
             }
@@ -175,7 +174,7 @@ public class HSocket implements ISocket {
                     return data;
                 }
                 try {
-                    Thread.currentThread().sleep(1000L);
+                    Thread.sleep(1000L);
                 } catch (Exception e) {
                 }
             }

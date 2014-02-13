@@ -46,7 +46,7 @@ public class RoboClientStatusWatch extends Thread {
             long delta = System.currentTimeMillis() - startTime;
             roboClient.currentTime.setText(formatTime(delta));
             try {
-                Thread.currentThread().sleep(200);
+                Thread.sleep(200);
             } catch (Exception e) {
             }
         }
