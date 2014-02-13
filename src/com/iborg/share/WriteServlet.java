@@ -36,8 +36,9 @@ import java.io.IOException;
  */
 
 public class WriteServlet extends HttpServlet {
-    
-    /** Initializes the servlet.
+    private static final long serialVersionUID = 1L;
+
+	/** Initializes the servlet.
      */
     public void init(ServletConfig config) throws ServletException {
         super.init(config);

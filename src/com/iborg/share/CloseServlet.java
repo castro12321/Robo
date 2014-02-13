@@ -34,6 +34,7 @@ import javax.servlet.http.*;
  * @version
  */
 public class CloseServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
     
     /** Initializes the servlet.
      */

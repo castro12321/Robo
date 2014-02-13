@@ -35,6 +35,7 @@ import com.iborg.net.*;
  * @version
  */
 public class AcceptServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
    
     /** Initializes the servlet.
     */  

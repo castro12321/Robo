@@ -49,6 +49,7 @@ import com.iborg.util.ConfigFile;
  */
 
 public class RoboClient extends Applet {
+	private static final long serialVersionUID = 1L;
     
     Scrollbar hscrollBar;
     Scrollbar vscrollBar;

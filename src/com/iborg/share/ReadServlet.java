@@ -36,6 +36,7 @@ import javax.servlet.http.*;
  */
 
 public class ReadServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
     
     /** Initializes the servlet.
      */
