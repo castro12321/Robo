@@ -27,8 +27,8 @@ package com.iborg.robo.server;
 
 import java.awt.Robot;
 
-import com.iborg.hsocket.*;
-import com.iborg.robo.*;
+import com.iborg.hsocket.IServerSocket;
+import com.iborg.hsocket.ISocket;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.

@@ -19,18 +19,29 @@
 
 package com.iborg.robo.client;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
+import java.applet.Applet;
+import java.awt.AWTException;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.Scrollbar;
+import java.awt.Toolkit;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
-import javax.swing.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import com.iborg.hsocket.*;
+import com.iborg.hsocket.HSocket;
+import com.iborg.hsocket.ISocket;
+import com.iborg.hsocket.TcpSocket;
+import com.iborg.robo.RoboProtocol;
 import com.iborg.util.ConfigFile;
-import com.iborg.robo.*;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.

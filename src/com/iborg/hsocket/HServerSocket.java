@@ -24,9 +24,10 @@
  */
 
 package com.iborg.hsocket;
-import java.util.*;
-import java.net.*;
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /** 
  *

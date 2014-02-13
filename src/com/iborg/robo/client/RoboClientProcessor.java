@@ -18,15 +18,21 @@
  */
 
 package com.iborg.robo.client;
-import java.io.*;
-import java.net.*;
-import java.util.zip.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.image.*;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.ColorModel;
+import java.awt.image.DirectColorModel;
+import java.awt.image.MemoryImageSource;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.InflaterInputStream;
 
-import com.iborg.hsocket.*;
-import com.iborg.robo.*;
+import com.iborg.hsocket.ISocket;
+import com.iborg.robo.RoboProtocol;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
