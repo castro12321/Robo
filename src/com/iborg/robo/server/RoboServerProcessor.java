@@ -441,7 +441,7 @@ public class RoboServerProcessor extends Thread {
         }
     }
     
-    private java.util.List segments = new ArrayList();
+    private java.util.List<Rectangle> segments = new ArrayList<>();
     
     private void registerScreenSegment(int x, int y, int w, int h) {
         segments.add(new Rectangle(x, y, w, h));
