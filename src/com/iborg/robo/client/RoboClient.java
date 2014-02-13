@@ -69,7 +69,7 @@ public class RoboClient extends Applet {
             String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
             String param;
             if("tcp".equalsIgnoreCase(connectionType)) {
-                String host = "localhost";
+                host = "localhost";
                 param = System.getProperty(RoboProtocol.paramHost);
                 if(param != null) {
                     host = param;
@@ -88,6 +88,8 @@ public class RoboClient extends Applet {
                     System.err.println(e);
                 }
             } else if("web".equalsIgnoreCase(connectionType)) {
+            	// TODO: add support xD
+            	log("WARNING. NOT SUPPORTED");
                 String connectionURL = "http://localhost/share/";
                 param = System.getProperty(RoboProtocol.paramConnectionURL);
                 if(param != null) {
@@ -253,6 +255,12 @@ public class RoboClient extends Applet {
         
         RoboClient roboClient = new RoboClient();
         roboClient.startLogin();
+    }
+    
+    
+    public static void log(String msg)
+    {
+    	System.out.println(msg);
     }
     
 }
