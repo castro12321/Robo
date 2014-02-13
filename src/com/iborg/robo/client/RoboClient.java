@@ -154,7 +154,7 @@ public class RoboClient extends Applet {
         Dimension screenDimension = toolkit.getScreenSize();
         f.setSize(screenDimension.width/2, screenDimension.height/2);
         f.setLocation(screenDimension.width/4, screenDimension.height/4);
-        f.show();
+        f.setVisible(true);
         
         f.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {

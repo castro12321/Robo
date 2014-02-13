@@ -25,9 +25,16 @@
 
 package com.iborg.hsocket;
 
-import java.io.*;
-import java.net.*;
-import com.iborg.util.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import com.iborg.util.UniqueObject;
 
 /**
  *
@@ -76,9 +83,10 @@ public class HSocket implements ISocket {
             URL url = new URL(openWithFill);
             URLConnection connection = url.openConnection();
             InputStream urlStream = connection.getInputStream();
-            DataInputStream dis = new DataInputStream(urlStream);
+            InputStreamReader isr = new InputStreamReader(urlStream);
+            BufferedReader br = new BufferedReader(isr);
             String in;
-            in = dis.readLine();
+            in = br.readLine();
             //            System.out.println("in is ->" + in + "<-");
             if (in != null) {
                 key = in;
@@ -120,9 +128,10 @@ public class HSocket implements ISocket {
                     out.write(data, offset + totalWritten, lenToWrite);
                     out.flush();
                     InputStream urlStream = connection.getInputStream();
-                    DataInputStream dis = new DataInputStream(urlStream);
+                    InputStreamReader isr = new InputStreamReader(urlStream);
+                    BufferedReader br = new BufferedReader(isr);
                     String in;
-                    in = dis.readLine();
+                    in = br.readLine();
                     urlStream.close();
                     if (in != null) {
                         try {

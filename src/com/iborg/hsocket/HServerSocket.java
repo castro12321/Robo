@@ -24,8 +24,9 @@
  */
 
 package com.iborg.hsocket;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -57,9 +58,10 @@ public class HServerSocket implements IServerSocket {
                 URL url = new URL(acceptSpec);
                 URLConnection connection = url.openConnection();
                 InputStream urlStream = connection.getInputStream();
-                DataInputStream dis = new DataInputStream(urlStream);
+                InputStreamReader isr = new InputStreamReader(urlStream);
+                BufferedReader br = new BufferedReader(isr);
                 String in;
-                in = dis.readLine();
+                in = br.readLine();
                 urlStream.close();
 //                System.out.println("in is ->" + in + "<-");
                 if(in != null) {

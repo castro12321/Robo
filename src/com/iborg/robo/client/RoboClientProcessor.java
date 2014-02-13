@@ -251,7 +251,7 @@ public class RoboClientProcessor extends Thread {
     
     public void adjustScrollbars() {
         if(!(width == 0 || height == 0)) {
-            roboClient.hscrollBar.setPageIncrement(
+            roboClient.hscrollBar.setBlockIncrement(
             (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getMinimum())
             * roboClient.screenCanvas.getSize().width / width);
             
@@ -259,7 +259,7 @@ public class RoboClientProcessor extends Thread {
             (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getMinimum())
             * roboClient.screenCanvas.getSize().width / width);
             
-            roboClient.vscrollBar.setPageIncrement(
+            roboClient.vscrollBar.setBlockIncrement(
             (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getMinimum())
             * roboClient.screenCanvas.getSize().height / height);
             

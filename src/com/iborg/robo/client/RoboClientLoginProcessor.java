@@ -142,7 +142,7 @@ public class RoboClientLoginProcessor extends Thread {
         // position dialog
         centerFrame(dialog);
         
-        dialog.show();
+        dialog.setVisible(true);
         
         String secret = textField.getText();
         try {
@@ -268,7 +268,7 @@ public class RoboClientLoginProcessor extends Thread {
         dialog.pack();
         
         centerFrame(dialog);
-        dialog.show();
+        dialog.setVisible(true);
         
         
         System.out.println("action " + maxUpdateChunk + " " + maxPixels);
@@ -334,7 +334,7 @@ public class RoboClientLoginProcessor extends Thread {
         Dimension screenDimension = toolkit.getScreenSize();
         dialog.setLocation((screenDimension.width - dialog.getSize().width)/2, (screenDimension.height - dialog.getSize().height)/2);
         
-        dialog.show();
+        dialog.setVisible(true);
         
         roboClient.stop();
     }

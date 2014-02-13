@@ -138,12 +138,12 @@ public class RoboClientScreenCanvas extends Canvas {
     public void paint(Graphics g) {
         if(image != null) {
             Dimension d = this.getSize();
-            if(roboClient.vscrollBar.getMaximum() > roboClient.vscrollBar.getVisible())
-                offsetY = (image.getHeight(null) - d.height) * roboClient.vscrollBar.getValue() / (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getVisible());
+            if(roboClient.vscrollBar.getMaximum() > roboClient.vscrollBar.getVisibleAmount())
+                offsetY = (image.getHeight(null) - d.height) * roboClient.vscrollBar.getValue() / (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getVisibleAmount());
             else
                 offsetY = 0;
-            if(roboClient.hscrollBar.getMaximum() > roboClient.hscrollBar.getVisible())
-                offsetX = (image.getWidth(null) - d.width) * roboClient.hscrollBar.getValue() / (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getVisible());
+            if(roboClient.hscrollBar.getMaximum() > roboClient.hscrollBar.getVisibleAmount())
+                offsetX = (image.getWidth(null) - d.width) * roboClient.hscrollBar.getValue() / (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getVisibleAmount());
             else
                 offsetX = 0;
             offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, offsetX, offsetY, offsetX + d.width, offsetY + d.height, null);
