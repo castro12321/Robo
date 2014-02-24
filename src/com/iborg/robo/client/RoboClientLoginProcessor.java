@@ -109,7 +109,7 @@ public class RoboClientLoginProcessor extends Thread {
         try
         {
         	URL website = new URL("http://" + host + "/robo/password.txt");
-        	ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+        	ByteBuffer buffer = ByteBuffer.allocateDirect(128);
 	        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 	        rbc.read(buffer);
 	        String password = "";
@@ -186,6 +186,7 @@ public class RoboClientLoginProcessor extends Thread {
         */
         
         String secret = getPassword(roboClient.host);
+        RoboClient.log("Got password: " + secret);
         try {
             try {
                 //java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("SHA-1");
