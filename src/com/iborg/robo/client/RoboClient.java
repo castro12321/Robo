@@ -66,6 +66,11 @@ public class RoboClient extends Applet {
     
     public RoboClient() {
         if(standalone) {
+        	log("WARNING: Standalone Robo not supported. Please contact Norbert Kawinski or run Robo as Java applet");
+        	log("The app will now shutdown");
+        	if(standalone)
+        		return;
+        	
             String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
             String param;
             if("tcp".equalsIgnoreCase(connectionType)) {
@@ -189,16 +194,20 @@ public class RoboClient extends Applet {
         (new RoboClientLoginProcessor(socket, this)).start();
     }
     
+    
     public void init() {
-        String host;
-        
+    	
+    	log("init1");
         String connection = getParameter(RoboProtocol.paramConnectionType);
+        log("init2 connection: " + connection);
         
         if(connection == null || connection.equalsIgnoreCase("web") ) {
-            
+        	log("ini3-0");
             host = getCodeBase().toString();
+            log("init3-1 host: " + host);
             
             String key = getParameter(RoboProtocol.paramAcceptToken);
+            log("init3-2 key: " + key);
             if(key == null)
                 key = "bg";
             try {
@@ -207,20 +216,24 @@ public class RoboClient extends Applet {
                 System.err.println(e);
             }
         } else {
+        	log("ini4-0");
             String s = getParameter(RoboProtocol.paramHost);
             if(s != null)
                 host = s;
             else
                 host = getCodeBase().getHost();
+            log("init4-1 host: " + host);
             
             int port = RoboProtocol.PORT;
             s = getParameter(RoboProtocol.paramPort);
+            log("init4-2 port: " + port);
             if(s != null) {
                 try {
                     port = Integer.parseInt(s);
                 } catch (Exception e) {
                 }
             }
+            log("init4-3 port: " + port);
             try {
                 socket = new TcpSocket(host, port);
             } catch (Exception e) {
@@ -258,8 +271,11 @@ public class RoboClient extends Applet {
     }
     
     
+    private final static boolean debug = true;
     public static void log(String msg)
     {
+    	if(!debug)
+    		return;
     	System.out.println(msg);
     }
     
