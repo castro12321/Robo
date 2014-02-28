@@ -28,8 +28,8 @@ import java.util.*;
  */
 
 public class UserRecord {
-    Set<String> advertised = new TreeSet<>();
-    HashMap<String, List<String>> accepted = new HashMap<>();
+    Set<String> advertised = new TreeSet<String>();
+    HashMap<String, List<String>> accepted = new HashMap<String, List<String>>();
     Date timestamp;
     
     public Set<String> getAdvertised()

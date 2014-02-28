@@ -18,9 +18,9 @@ public class CommunicationManager {
     public static long OPEN_WAIT=60000L;
     
     //static HashMap accepted = new HashMap();
-    private static Map<String, UserRecord> users = new HashMap<>();
-    private static Map<String, String> currentSockets = new HashMap<>();
-    private static Map<String, ArrayList<byte[]>> comBuffer = new HashMap<>();
+    private static Map<String, UserRecord> users = new HashMap<String, UserRecord>();
+    private static Map<String, String> currentSockets = new HashMap<String, String>();
+    private static Map<String, ArrayList<byte[]>> comBuffer = new HashMap<String, ArrayList<byte[]>>();
     
     private static Map<String, SocketInfo> socketInfo = new HashMap<String, SocketInfo>();
     
@@ -131,7 +131,7 @@ public class CommunicationManager {
             synchronized(accepted) {
                 List<String> sockets = (List<String>) accepted.get(key);
                 if(sockets == null) {
-                    sockets = new ArrayList<>();
+                    sockets = new ArrayList<String>();
                 }
                 String socket = com.iborg.util.UniqueObject.createUniqueString();
                 String serverSocket = socket + "S";
