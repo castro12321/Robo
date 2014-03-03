@@ -48,6 +48,8 @@ import com.iborg.util.ConfigFile;
  * @version 
  */
 
+
+
 public class RoboClient extends Applet {
 	private static final long serialVersionUID = 1L;
     
@@ -64,57 +66,8 @@ public class RoboClient extends Applet {
     ISocket socket;
     static boolean standalone = false;
     
-    public RoboClient() {
-        if(standalone) {
-        	log("WARNING: Standalone Robo not supported. Please contact Norbert Kawinski or run Robo as Java applet");
-        	log("The app will now shutdown");
-        	if(standalone)
-        		return;
-        	
-            String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
-            String param;
-            if("tcp".equalsIgnoreCase(connectionType)) {
-                host = "localhost";
-                param = System.getProperty(RoboProtocol.paramHost);
-                if(param != null) {
-                    host = param;
-                }
-                
-                param = System.getProperty(RoboProtocol.paramPort);
-                if(param != null) {
-                    try {
-                        port = Integer.parseInt(param);
-                    } catch (Exception e) {
-                    }
-                }
-                try {
-                    socket = new TcpSocket(host, port);
-                } catch (Exception e) {
-                    System.err.println(e);
-                }
-            } else if("web".equalsIgnoreCase(connectionType)) {
-            	// TODO: add support xD
-            	log("WARNING. NOT SUPPORTED");
-                String connectionURL = "http://localhost/share/";
-                param = System.getProperty(RoboProtocol.paramConnectionURL);
-                if(param != null) {
-                    connectionURL = param;
-                }
-                
-                String acceptToken  = "bg";
-                param = System.getProperty(RoboProtocol.paramAcceptToken);
-                if(param != null) {
-                    acceptToken = param;
-                }
-                try {
-                    socket = new HSocket(connectionURL, acceptToken);
-                } catch (IOException ioe) {
-                    System.err.println(ioe);
-                }
-            } else {
-                System.err.println("Unknown connectionType " + connectionType);
-            }
-        }
+    public RoboClient()
+    {
     }
     
     public void createRemoteScreenPanel(Container c) {
