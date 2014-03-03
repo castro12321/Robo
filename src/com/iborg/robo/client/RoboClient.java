@@ -42,13 +42,12 @@ import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
 import com.iborg.robo.RoboProtocol;
 import com.iborg.util.ConfigFile;
+import com.sun.corba.se.pept.transport.Connection;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
  * @version 
  */
-
-
 
 
 public class RoboClient extends Applet {
@@ -62,8 +61,11 @@ public class RoboClient extends Applet {
     Label lastTime;
     Label currentTime;
     Label averageTime;
+    
+    // Connection
     String host;
-    int port;
+    int    port;
+    String pass;
     ISocket socket;
     
     public RoboClient()
@@ -148,50 +150,15 @@ public class RoboClient extends Applet {
     }
     
     
-    public void init() {
-    	
-    	log("init1");
-        String connection = getParameter(RoboProtocol.paramConnectionType);
-        log("init2 connection: " + connection);
-        
-        if(connection == null || connection.equalsIgnoreCase("web") ) {
-        	log("ini3-0");
-            host = getCodeBase().toString();
-            log("init3-1 host: " + host);
-            
-            String key = getParameter(RoboProtocol.paramAcceptToken);
-            log("init3-2 key: " + key);
-            if(key == null)
-                key = "bg";
-            try {
-                socket = new HSocket(host, key);
-            } catch (Exception e) {
-                System.err.println(e);
-            }
-        } else {
-        	log("ini4-0");
-            String s = getParameter(RoboProtocol.paramHost);
-            if(s != null)
-                host = s;
-            else
-                host = getCodeBase().getHost();
-            log("init4-1 host: " + host);
-            
-            int port = RoboProtocol.PORT;
-            s = getParameter(RoboProtocol.paramPort);
-            log("init4-2 port: " + port);
-            if(s != null) {
-                try {
-                    port = Integer.parseInt(s);
-                } catch (Exception e) {
-                }
-            }
-            log("init4-3 port: " + port);
-            try {
-                socket = new TcpSocket(host, port);
-            } catch (Exception e) {
-                System.err.println(e);
-            }
+    public void init()
+    {
+    	host = getParameter(RoboProtocol.paramHost);
+    	port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
+    	pass = getParameter(RoboProtocol.paramPassword);
+        try {
+        	socket = new TcpSocket(host, port);
+        } catch (Exception e) {
+            System.err.println(e);
         }
     }
     
