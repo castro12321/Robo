@@ -152,13 +152,17 @@ public class RoboClient extends Applet {
     
     public void init()
     {
+    	log("cp1");
     	host = getParameter(RoboProtocol.paramHost);
+    	log("cp2 " + host);
     	port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
+    	log("cp3 " + port);
     	pass = getParameter(RoboProtocol.paramPassword);
+    	log("cp4 " + pass);
         try {
         	socket = new TcpSocket(host, port);
         } catch (Exception e) {
-            System.err.println(e);
+        	e.printStackTrace();
         }
     }
     

@@ -69,7 +69,7 @@ public class RoboClientLoginProcessor extends Thread {
             os= s.getOutputStream();
             is = s.getInputStream();
         } catch (Exception e) {
-            System.err.println(e);
+        	e.printStackTrace();
         }
         this.roboClient = roboClient;
     }
@@ -186,7 +186,7 @@ public class RoboClientLoginProcessor extends Thread {
         */
         
         //String secret = getPassword(roboClient.host);
-        String secret = getPassword(roboClient.pass);
+        String secret = roboClient.pass;
         RoboClient.log("Got password: " + secret);
         try {
             try {
