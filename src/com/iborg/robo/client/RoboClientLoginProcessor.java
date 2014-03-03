@@ -185,7 +185,8 @@ public class RoboClientLoginProcessor extends Thread {
         String secret = textField.getText();
         */
         
-        String secret = getPassword(roboClient.host);
+        //String secret = getPassword(roboClient.host);
+        String secret = getPassword(roboClient.pass);
         RoboClient.log("Got password: " + secret);
         try {
             try {
