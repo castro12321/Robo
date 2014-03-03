@@ -50,6 +50,7 @@ import com.iborg.util.ConfigFile;
 
 
 
+
 public class RoboClient extends Applet {
 	private static final long serialVersionUID = 1L;
     
@@ -64,7 +65,6 @@ public class RoboClient extends Applet {
     String host;
     int port;
     ISocket socket;
-    static boolean standalone = false;
     
     public RoboClient()
     {
@@ -200,27 +200,12 @@ public class RoboClient extends Applet {
         //startCapture();
     }
     
-    public void stop() {
-        if(standalone)
-            System.exit(0);
+    public void stop()
+    {
     }
     
-    public static void main(String args[]) throws AWTException {
-        
-        standalone = true;
-
-        String fileName = "Robo.cfg";
-        if(args.length > 0) {
-            fileName = args[0];
-        }
-        try {
-            ConfigFile.process(fileName);
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
-        
-        RoboClient roboClient = new RoboClient();
-        roboClient.startLogin();
+    public static void main(String args[]) throws AWTException
+    {
     }
     
     
