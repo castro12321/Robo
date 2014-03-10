@@ -37,12 +37,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-import com.iborg.hsocket.HSocket;
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
 import com.iborg.robo.RoboProtocol;
-import com.iborg.util.ConfigFile;
-import com.sun.corba.se.pept.transport.Connection;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.

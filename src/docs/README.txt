@@ -17,12 +17,6 @@ Why?
 Just for the fun of it.  
 
 
-Documentation
--------------
-
-Documentation is available in HTML format, in the docs/ directory.
-
-
 Licensing
 ---------
 
