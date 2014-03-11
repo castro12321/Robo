@@ -44,6 +44,7 @@ public class RoboClientProcessor extends Thread {
     private OutputStream os;
     private RoboClient roboClient;
     public  int width, height;
+    private float scaleX, scaleY;
     
     private int pixelSize = 32;
     private int redMask = 0xFF0000;
@@ -119,8 +120,8 @@ public class RoboClientProcessor extends Thread {
     public synchronized void mouseMoved(int x, int y) throws Exception {
         os.write(RoboProtocol.MOUSE_MOVED);
         DataOutputStream dos = new DataOutputStream(os);
-        dos.writeInt(x);
-        dos.writeInt(y);
+        dos.writeInt((int)(x * scaleX));
+        dos.writeInt((int)(y * scaleY));
         
         dos.flush();
     }
@@ -128,8 +129,8 @@ public class RoboClientProcessor extends Thread {
     public synchronized void mouseDragged(int x, int y) throws Exception {
         os.write(RoboProtocol.MOUSE_MOVED);
         DataOutputStream dos = new DataOutputStream(os);
-        dos.writeInt(x);
-        dos.writeInt(y);
+        dos.writeInt((int)(x * scaleX));
+        dos.writeInt((int)(y * scaleY));
         dos.flush();
     }
     
@@ -247,7 +248,11 @@ public class RoboClientProcessor extends Thread {
     }
     
     public void adjustScale() {
-    	// TODO: adjust scale
+    	// remote size / local size
+    	RoboClientScreenCanvas canvas = roboClient.screenCanvas;
+    	scaleX = (float)width  / (float)canvas.getSize().width;
+    	scaleY = (float)height / (float)canvas.getSize().height;
+    	RoboClient.log("scale: " + scaleX + ":" + scaleY);
     }
 }
 
