@@ -250,6 +250,7 @@ public class RoboClientProcessor extends Thread {
     }
     
     public void adjustScrollbars() {
+    	/* TODO: scrollbars removed
         if(!(width == 0 || height == 0)) {
             roboClient.hscrollBar.setBlockIncrement(
             (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getMinimum())
@@ -268,6 +269,7 @@ public class RoboClientProcessor extends Thread {
             * roboClient.screenCanvas.getSize().height / height);
             
         }
+        */
     }
 }
 

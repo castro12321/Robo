@@ -25,12 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.Scrollbar;
 import java.awt.Toolkit;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -50,14 +45,18 @@ import com.iborg.robo.RoboProtocol;
 public class RoboClient extends Applet {
 	private static final long serialVersionUID = 1L;
     
+	/*
     Scrollbar hscrollBar;
     Scrollbar vscrollBar;
+    */
     RoboClientScreenCanvas screenCanvas;
     RoboClientProcessor processor;
     RoboClientStatusWatch statusWatcher;
+    /*
     Label lastTime;
     Label currentTime;
     Label averageTime;
+    */
     
     // Connection
     String host;
@@ -71,13 +70,19 @@ public class RoboClient extends Applet {
     
     public void createRemoteScreenPanel(Container c) {
         c.setLayout(new BorderLayout());
+        /* vscrollbar
         vscrollBar = new Scrollbar();
         c.add(BorderLayout.EAST, vscrollBar);
+        */
+        
+        /* TODO: hscrollbar
         hscrollBar = new Scrollbar(Scrollbar.HORIZONTAL);
         Panel panel1 = new Panel();
         panel1.setLayout(new BorderLayout());
         panel1.add(BorderLayout.CENTER, hscrollBar);
+        */
         
+        /* TODO: timings
         Panel panel = new Panel();
         averageTime = new Label("avg:");
         panel.add(averageTime);
@@ -87,10 +92,11 @@ public class RoboClient extends Applet {
         panel.add(currentTime);
         panel1.add(BorderLayout.EAST, panel);
         c.add(BorderLayout.SOUTH, panel1);
+        */
         screenCanvas = new RoboClientScreenCanvas(this);
         c.add(BorderLayout.CENTER, screenCanvas);
         
-        
+        /* TODO: scrollbars
         hscrollBar.addAdjustmentListener(new AdjustmentListener() {
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 screenCanvas.repaint();
@@ -102,6 +108,7 @@ public class RoboClient extends Applet {
                 screenCanvas.repaint();
             }
         });
+        */
     }
     
     public void createUserInterface() {

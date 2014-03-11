@@ -43,8 +43,10 @@ public class RoboClientStatusWatch extends Thread {
     public void run()
     {
         while(true) {
+        	/* TODO: delta removed
             long delta = System.currentTimeMillis() - startTime;
             roboClient.currentTime.setText(formatTime(delta));
+            */
             try {
                 Thread.sleep(200);
             } catch (Exception e) {
@@ -70,12 +72,14 @@ public class RoboClientStatusWatch extends Thread {
     {
         requestCounter ++;
         
+        /* TODO: timings removed
         long delta = System.currentTimeMillis() - startTime;
         lastTime = delta;
         roboClient.lastTime.setText(formatTime(delta));
 
         delta = System.currentTimeMillis() - firstTime;
         roboClient.averageTime.setText(formatTime(delta / requestCounter));
+        */
     }
 }
 
