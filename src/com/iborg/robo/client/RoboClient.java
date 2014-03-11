@@ -20,7 +20,6 @@
 package com.iborg.robo.client;
 
 import java.applet.Applet;
-import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -45,24 +44,14 @@ import com.iborg.robo.RoboProtocol;
 public class RoboClient extends Applet {
 	private static final long serialVersionUID = 1L;
     
-	/*
-    Scrollbar hscrollBar;
-    Scrollbar vscrollBar;
-    */
     RoboClientScreenCanvas screenCanvas;
     RoboClientProcessor processor;
-    RoboClientStatusWatch statusWatcher;
-    /*
-    Label lastTime;
-    Label currentTime;
-    Label averageTime;
-    */
     
     // Connection
-    String host;
-    int    port;
-    String pass;
-    ISocket socket;
+    private String host;
+    private int    port;
+    private String pass;
+    private ISocket socket;
     
     public RoboClient()
     {
@@ -70,45 +59,8 @@ public class RoboClient extends Applet {
     
     public void createRemoteScreenPanel(Container c) {
         c.setLayout(new BorderLayout());
-        /* vscrollbar
-        vscrollBar = new Scrollbar();
-        c.add(BorderLayout.EAST, vscrollBar);
-        */
-        
-        /* TODO: hscrollbar
-        hscrollBar = new Scrollbar(Scrollbar.HORIZONTAL);
-        Panel panel1 = new Panel();
-        panel1.setLayout(new BorderLayout());
-        panel1.add(BorderLayout.CENTER, hscrollBar);
-        */
-        
-        /* TODO: timings
-        Panel panel = new Panel();
-        averageTime = new Label("avg:");
-        panel.add(averageTime);
-        lastTime = new Label("last:");
-        panel.add(lastTime);
-        currentTime = new Label("cur:");
-        panel.add(currentTime);
-        panel1.add(BorderLayout.EAST, panel);
-        c.add(BorderLayout.SOUTH, panel1);
-        */
         screenCanvas = new RoboClientScreenCanvas(this);
         c.add(BorderLayout.CENTER, screenCanvas);
-        
-        /* TODO: scrollbars
-        hscrollBar.addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                screenCanvas.repaint();
-            }
-        });
-        
-        vscrollBar.addAdjustmentListener(new AdjustmentListener() {
-            public void adjustmentValueChanged(AdjustmentEvent e) {
-                screenCanvas.repaint();
-            }
-        });
-        */
     }
     
     public void createUserInterface() {
@@ -144,8 +96,6 @@ public class RoboClient extends Applet {
     public void startCapture() {
         processor = new RoboClientProcessor(socket, this);
         createUserInterface();
-        statusWatcher = new RoboClientStatusWatch(this);
-        statusWatcher.start();
         (processor).start();
     }
     
@@ -156,13 +106,13 @@ public class RoboClient extends Applet {
     
     public void init()
     {
-    	log("cp1");
+    	log("init1");
     	host = getParameter(RoboProtocol.paramHost);
-    	log("cp2 " + host);
+    	log("init2 " + host);
     	port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
-    	log("cp3 " + port);
+    	log("init3 " + port);
     	pass = getParameter(RoboProtocol.paramPassword);
-    	log("cp4 " + pass);
+    	log("init4 " + pass);
         try {
         	socket = new TcpSocket(host, port);
         } catch (Exception e) {
@@ -176,10 +126,6 @@ public class RoboClient extends Applet {
     }
     
     public void stop()
-    {
-    }
-    
-    public static void main(String args[]) throws AWTException
     {
     }
     

@@ -97,7 +97,6 @@ public class RoboClientProcessor extends Thread {
     }
     
     public synchronized void requestScreenParam() {
-        roboClient.statusWatcher.startCounts();
         
         try {
             os.write(RoboProtocol.SCREEN_PARAM_REQUEST );
@@ -108,7 +107,6 @@ public class RoboClientProcessor extends Thread {
     }
     
     public synchronized void requestScreen() {
-        roboClient.statusWatcher.startCounts();
         
         try {
             os.write(RoboProtocol.SCREEN_REQUEST);
@@ -121,8 +119,8 @@ public class RoboClientProcessor extends Thread {
     public synchronized void mouseMoved(int x, int y) throws Exception {
         os.write(RoboProtocol.MOUSE_MOVED);
         DataOutputStream dos = new DataOutputStream(os);
-        dos.writeInt(roboClient.screenCanvas.offsetX + x);
-        dos.writeInt(roboClient.screenCanvas.offsetY + y);
+        dos.writeInt(x);
+        dos.writeInt(y);
         
         dos.flush();
     }
@@ -130,8 +128,8 @@ public class RoboClientProcessor extends Thread {
     public synchronized void mouseDragged(int x, int y) throws Exception {
         os.write(RoboProtocol.MOUSE_MOVED);
         DataOutputStream dos = new DataOutputStream(os);
-        dos.writeInt(roboClient.screenCanvas.offsetX + x);
-        dos.writeInt(roboClient.screenCanvas.offsetY + y);
+        dos.writeInt(x);
+        dos.writeInt(y);
         dos.flush();
     }
     
@@ -169,7 +167,7 @@ public class RoboClientProcessor extends Thread {
             width = dis.readInt();
             height = dis.readInt();
             roboClient.screenCanvas.createScreenImage(width, height);
-            adjustScrollbars();
+            adjustScale();
             requestScreen();
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -190,7 +188,6 @@ public class RoboClientProcessor extends Thread {
     
     private void drawScreen() {
         roboClient.screenCanvas.repaint();
-        roboClient.statusWatcher.completeCount();
     }
     
     private void screenNop() {
@@ -249,27 +246,8 @@ public class RoboClientProcessor extends Thread {
         
     }
     
-    public void adjustScrollbars() {
-    	/* TODO: scrollbars removed
-        if(!(width == 0 || height == 0)) {
-            roboClient.hscrollBar.setBlockIncrement(
-            (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getMinimum())
-            * roboClient.screenCanvas.getSize().width / width);
-            
-            roboClient.hscrollBar.setVisibleAmount(
-            (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getMinimum())
-            * roboClient.screenCanvas.getSize().width / width);
-            
-            roboClient.vscrollBar.setBlockIncrement(
-            (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getMinimum())
-            * roboClient.screenCanvas.getSize().height / height);
-            
-            roboClient.vscrollBar.setVisibleAmount(
-            (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getMinimum())
-            * roboClient.screenCanvas.getSize().height / height);
-            
-        }
-        */
+    public void adjustScale() {
+    	// TODO: adjust scale
     }
 }
 

@@ -22,7 +22,6 @@ package com.iborg.robo.client;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -31,8 +30,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 
 /** 
  *
@@ -50,8 +47,6 @@ public class RoboClientScreenCanvas extends Canvas {
     private Graphics offScreenGraphics;
     
     RoboClient roboClient;
-    public int offsetX;
-    public int offsetY;
     
     public RoboClientScreenCanvas() {
         super();
@@ -113,10 +108,10 @@ public class RoboClientScreenCanvas extends Canvas {
         
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                roboClient.processor.adjustScrollbars();
+                roboClient.processor.adjustScale();
                 offScreenImage = createImage(getSize().width, getSize().height);
                 offScreenGraphics = offScreenImage.getGraphics();
-                roboClient.processor.adjustScrollbars();
+                roboClient.processor.adjustScale();
             }
         });
         
@@ -141,18 +136,6 @@ public class RoboClientScreenCanvas extends Canvas {
     public void paint(Graphics g) {
         if(image != null) {
             Dimension d = this.getSize();
-            /* TODO: vscrollbar i hscrollbar
-            if(roboClient.vscrollBar.getMaximum() > roboClient.vscrollBar.getVisibleAmount())
-                offsetY = (image.getHeight(null) - d.height) * roboClient.vscrollBar.getValue() / (roboClient.vscrollBar.getMaximum() - roboClient.vscrollBar.getVisibleAmount());
-            else
-                offsetY = 0;
-            if(roboClient.hscrollBar.getMaximum() > roboClient.hscrollBar.getVisibleAmount())
-                offsetX = (image.getWidth(null) - d.width) * roboClient.hscrollBar.getValue() / (roboClient.hscrollBar.getMaximum() - roboClient.hscrollBar.getVisibleAmount());
-            else
-                offsetX = 0;
-            */
-            offsetX = 0;
-            offsetY = 0;
             
             offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, 0, 0, image.getWidth(this), image.getHeight(this), null);
             g.drawImage(offScreenImage, 0, 0, null);
