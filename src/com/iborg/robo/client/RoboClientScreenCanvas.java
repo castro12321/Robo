@@ -22,6 +22,7 @@ package com.iborg.robo.client;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -30,6 +31,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 /** 
  *
@@ -151,7 +154,7 @@ public class RoboClientScreenCanvas extends Canvas {
             offsetX = 0;
             offsetY = 0;
             
-            offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, offsetX, offsetY, offsetX + d.width, offsetY + d.height, null);
+            offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, 0, 0, image.getWidth(this), image.getHeight(this), null);
             g.drawImage(offScreenImage, 0, 0, null);
         }
     }
