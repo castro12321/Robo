@@ -49,11 +49,11 @@ import com.iborg.robo.RoboProtocol;
  */
 
 public class RoboClientLoginProcessor extends Thread {
-    InputStream is;
-    OutputStream os;
-    RoboClient roboClient;
-    int maxPixels = -1;
-    int maxUpdateChunk = -1;
+	private InputStream is;
+    private OutputStream os;
+    private RoboClient roboClient;
+    private int maxPixels = -1;
+    private int maxUpdateChunk = -1;
     
     
     RoboClientLoginProcessor(ISocket s, RoboClient roboClient) {

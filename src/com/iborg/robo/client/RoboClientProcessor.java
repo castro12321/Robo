@@ -40,16 +40,16 @@ import com.iborg.robo.RoboProtocol;
  */
 
 public class RoboClientProcessor extends Thread {
-    InputStream is;
-    OutputStream os;
-    RoboClient roboClient;
-    int width, height;
+	private InputStream is;
+    private OutputStream os;
+    private RoboClient roboClient;
+    public  int width, height;
     
-    int pixelSize = 32;
-    int redMask = 0xFF0000;
-    int greenMask = 0x00FF00;
-    int blueMask = 0x0000FF;
-    int alphaMask = 0xFF000000;
+    private int pixelSize = 32;
+    private int redMask = 0xFF0000;
+    private int greenMask = 0x00FF00;
+    private int blueMask = 0x0000FF;
+    private int alphaMask = 0xFF000000;
     
     
     RoboClientProcessor(ISocket s, RoboClient roboClient) {

@@ -48,9 +48,7 @@ public class RoboClient extends Applet {
     RoboClientProcessor processor;
     
     // Connection
-    private String host;
-    private int    port;
-    private String pass;
+    public  String pass;
     private ISocket socket;
     
     public RoboClient()
@@ -107,9 +105,9 @@ public class RoboClient extends Applet {
     public void init()
     {
     	log("init1");
-    	host = getParameter(RoboProtocol.paramHost);
+    	String host = getParameter(RoboProtocol.paramHost);
     	log("init2 " + host);
-    	port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
+    	int port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
     	log("init3 " + port);
     	pass = getParameter(RoboProtocol.paramPassword);
     	log("init4 " + pass);
