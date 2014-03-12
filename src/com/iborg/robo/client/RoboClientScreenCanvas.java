@@ -97,12 +97,14 @@ public class RoboClientScreenCanvas extends Canvas {
             public void keyPressed(KeyEvent e) {
                 try {
                     roboClient.processor.keyPressed(e.getKeyCode());
+                    e.consume();
                 } catch (Exception ex) {
                 }
             }
             public void keyReleased(KeyEvent e) {
                 try {
                     roboClient.processor.keyReleased(e.getKeyCode());
+                    e.consume();
                 } catch (Exception ex) {
                 }
             }
