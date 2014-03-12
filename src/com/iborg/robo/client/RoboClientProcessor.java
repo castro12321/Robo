@@ -252,7 +252,6 @@ public class RoboClientProcessor extends Thread {
     	RoboClientScreenCanvas canvas = roboClient.screenCanvas;
     	scaleX = (float)width  / (float)canvas.getSize().width;
     	scaleY = (float)height / (float)canvas.getSize().height;
-    	RoboClient.log("scale: " + scaleX + ":" + scaleY);
     }
 }
 

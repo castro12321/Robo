@@ -90,6 +90,9 @@ public class RoboClientScreenCanvas extends Canvas {
             
         });
         
+        // Important line below! Allows to use TAB key and other functional keys
+        setFocusTraversalKeysEnabled(false);
+        
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 try {
