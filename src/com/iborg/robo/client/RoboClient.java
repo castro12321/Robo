@@ -68,8 +68,13 @@ public class RoboClient extends Applet {
         // position frame
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenDimension = toolkit.getScreenSize();
-        f.setSize(screenDimension.width/2, screenDimension.height/2);
-        f.setLocation(screenDimension.width/4, screenDimension.height/4);
+        //f.setSize(screenDimension.width/2, screenDimension.height/2);
+        final int sizeX = 800, sizeY = 600;
+        f.setSize(sizeX, sizeY);
+        //f.setLocation(screenDimension.width/4, screenDimension.height/4);
+        final int locationX = (screenDimension.width/2  - sizeX/2),
+        		  locationY = (screenDimension.height/2 - sizeY/2);
+        f.setLocation(locationX, locationY);
         f.setVisible(true);
         
         f.addWindowListener(new WindowAdapter() {
