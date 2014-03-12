@@ -25,7 +25,6 @@ import java.awt.Robot;
 import java.io.IOException;
 
 import com.iborg.hsocket.IServerSocket;
-import com.iborg.robo.HServerSocketFactory;
 import com.iborg.robo.RoboProtocol;
 import com.iborg.robo.TcpServerSocketFactory;
 import com.iborg.util.ConfigFile;
@@ -58,8 +57,6 @@ public class RoboServer {
         String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
         if("tcp".equalsIgnoreCase(connectionType)) {
             serverSocket = TcpServerSocketFactory.createServerSocket();
-        } else if("web".equalsIgnoreCase(connectionType)) {
-            serverSocket = HServerSocketFactory.createServerSocket();
         } else {
             System.err.println("Unknown connection type " + connectionType);
         }
