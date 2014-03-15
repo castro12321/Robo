@@ -86,6 +86,9 @@ public class RoboClientProcessor extends Thread {
                     case RoboProtocol.SCREEN_COLOR_MODEL:
                         screenColorModel();
                         break;
+                    case RoboProtocol.CONNECTION_CLOSED:
+                    	roboClient.window.close();
+                    	return;
                     default:
                         //System.out.println("unknown command " + command);
                         break;

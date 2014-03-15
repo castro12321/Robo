@@ -41,6 +41,7 @@ import java.util.zip.DeflaterOutputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
+import com.iborg.robo.client.RoboClient;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -48,6 +49,7 @@ import com.iborg.robo.RoboProtocol;
  */
 
 public class RoboServerProcessor extends Thread {
+	
     InputStream is;
     OutputStream os;
     Robot robot;
@@ -76,6 +78,29 @@ public class RoboServerProcessor extends Thread {
         screenRect = new Rectangle(0, 0, screenDimension.width, screenDimension.height);
     }
     
+    public void kill()
+    {
+    	interrupt();
+    }
+    
+    
+    // Returns whether handled interrupted() or not
+    public synchronized boolean handleInterrupted()
+    {
+    	if(interrupted())
+    	{
+    		try
+        	{
+        		os.write(RoboProtocol.CONNECTION_CLOSED);
+        		os.flush();
+        	}
+        	catch(IOException e) {}
+    		return true;
+    	}
+    	return false;
+    }
+    
+    
     // main loop
     public void run() {
         
@@ -84,6 +109,10 @@ public class RoboServerProcessor extends Thread {
             while(!loggedIn) {
                 sendLoginRequest();
                 int command = is.read();
+                
+                if(handleInterrupted())
+                	return;
+                
                 if(command == RoboProtocol.LOGIN || command == RoboProtocol.LOGIN_MESSAGE_DIGEST) {
                     loggedIn = processLogin(command);
                 } else {
@@ -104,6 +133,10 @@ public class RoboServerProcessor extends Thread {
             while(true) {
                 try {
                     int command = is.read();
+                    
+                    if(handleInterrupted())
+                    	return;
+                    
                     switch(command) {
                         case RoboProtocol.SCREEN_REQUEST:
                             screen();

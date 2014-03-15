@@ -29,6 +29,7 @@ import java.awt.Robot;
 
 import com.iborg.hsocket.IServerSocket;
 import com.iborg.hsocket.ISocket;
+import com.iborg.robo.client.RoboClient;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -38,6 +39,8 @@ import com.iborg.hsocket.ISocket;
 public class RoboServerListener extends Thread {
     Robot robot;
     IServerSocket serverSocket;
+    
+    RoboServerProcessor client = null;
     
     public RoboServerListener(Robot robot, IServerSocket serverSocket) {
         this.robot = robot;
@@ -49,7 +52,12 @@ public class RoboServerListener extends Thread {
         try {
             while(true) {
                 ISocket s = serverSocket.accept();
-                (new RoboServerProcessor(s, robot)).start();
+                
+                if(client != null)
+                	client.kill();
+                	
+                client = new RoboServerProcessor(s, robot);
+                client.start();
             }
         } catch (Exception e) {
             System.err.println(e);
