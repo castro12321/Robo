@@ -20,16 +20,6 @@
 package com.iborg.robo.client;
 
 import java.applet.Applet;
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
@@ -48,51 +38,18 @@ public class RoboClient extends Applet {
     RoboClientProcessor processor;
     
     // Connection
-    public  String pass;
+    String pass;
     private ISocket socket;
     
     public RoboClient()
     {
     }
     
-    public void createRemoteScreenPanel(Container c) {
-        c.setLayout(new BorderLayout());
-        screenCanvas = new RoboClientScreenCanvas(this);
-        c.add(BorderLayout.CENTER, screenCanvas);
-    }
+   
     
     public void createUserInterface() {
-        final Frame f = new  Frame();
-        
-        createRemoteScreenPanel(f);
-        // position frame
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenDimension = toolkit.getScreenSize();
-        //f.setSize(screenDimension.width/2, screenDimension.height/2);
-        final int sizeX = 800, sizeY = 600;
-        f.setSize(sizeX, sizeY);
-        //f.setLocation(screenDimension.width/4, screenDimension.height/4);
-        final int locationX = (screenDimension.width/2  - sizeX/2),
-        		  locationY = (screenDimension.height/2 - sizeY/2);
-        f.setLocation(locationX, locationY);
-        f.setVisible(true);
-        
-        f.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                try {
-                    socket.close();
-                } catch (IOException ioe) {
-                }
-                f.dispose();
-                stop();
-            }
-        });
-        
-        f.addComponentListener(new ComponentAdapter() {
-            public void componentMoved(ComponentEvent e) {
-                screenCanvas.repaint();
-            }
-        });
+    	screenCanvas = new RoboClientScreenCanvas(this);
+        new RoboClientWindow(this, socket);
         
     }
     
