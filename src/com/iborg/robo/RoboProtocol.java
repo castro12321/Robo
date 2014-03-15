@@ -47,6 +47,8 @@ public class RoboProtocol {
     public static final int MOUSE_RELEASED = 42;
     public static final int KEY_PRESSED = 43;
     public static final int KEY_RELEASED = 44;
+    
+    public static final int CONNECTION_CLOSED = 60;
 
 	public static final String paramPassword = "robo.password";
 	public static final String paramConnectionType = "robo.connectionType";

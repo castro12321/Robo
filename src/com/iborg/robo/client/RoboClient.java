@@ -36,6 +36,7 @@ public class RoboClient extends Applet {
     
     RoboClientScreenCanvas screenCanvas;
     RoboClientProcessor processor;
+    RoboClientWindow window;
     
     // Connection
     String pass;
@@ -49,7 +50,7 @@ public class RoboClient extends Applet {
     
     public void createUserInterface() {
     	screenCanvas = new RoboClientScreenCanvas(this);
-        new RoboClientWindow(this, socket);
+        window = new RoboClientWindow(this, socket);
         
     }
     
