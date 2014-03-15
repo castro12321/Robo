@@ -40,12 +40,15 @@ import com.iborg.hsocket.ISocket;
 
 public class RoboClientWindow
 {
-	private final JFrame resizeBorder = new JFrame();
-	private final JFrame window       = new JFrame();
+	private final RoboClient robocient;
+	private JFrame resizeBorder = new JFrame();
+	private JFrame window       = new JFrame();
 	private Character resizing        = null;
 	
 	public RoboClientWindow(final RoboClient roboclient, final ISocket socket)
 	{
+		this.robocient = roboclient;
+		
 		resizeBorder.getContentPane().setBackground(Color.WHITE);
 		resizeBorder.setVisible(false);
 		
@@ -60,25 +63,8 @@ public class RoboClientWindow
 		window.setLocation(locationX, locationY);
 		window.setVisible(true);
 		
-		// Window listener
-		window.addWindowListener(new WindowAdapter()
-		{
-			@Override
-			public void windowClosing(WindowEvent e)
-			{
-				try
-				{
-					socket.close();
-				}
-				catch(IOException ioe)
-				{
-				}
-				window.dispose();
-				roboclient.stop();
-			}
-		});
-		
 		// Global mouse listener
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		final AWTEventListener listener = new AWTEventListener()
 		{
 			public void eventDispatched(AWTEvent event)
@@ -92,7 +78,29 @@ public class RoboClientWindow
 				}
 			}
 		};
-		Toolkit.getDefaultToolkit().addAWTEventListener(listener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+		toolkit.addAWTEventListener(listener, AWTEvent.MOUSE_MOTION_EVENT_MASK);
+		
+		
+		// Window listener
+		window.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				try
+				{
+					socket.close();
+				}
+				catch(IOException ioe)
+				{}
+				toolkit.removeAWTEventListener(listener);
+				window.dispose();
+				window = null;
+				resizeBorder.dispose();
+				resizeBorder = null;
+				roboclient.stop();
+			}
+		});
 		
 		// Component Moved/Resized listener
 		window.addComponentListener(new ComponentAdapter()
@@ -118,6 +126,7 @@ public class RoboClientWindow
 				
 				Component component = e.getComponent();
 				Rectangle newSize = component.getBounds();
+				RoboClient.log("bound: " + newSize.x + " " + newSize.y + " " + newSize.width + " " + newSize.height);
 				
 				if(resizing == null)
 					if(newSize.width != oldWidth)
@@ -139,5 +148,11 @@ public class RoboClientWindow
 				resizeBorder.setBounds(newSize);
 			}
 		});
+	}
+	
+	
+	public void close()
+	{
+		window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
 	}
 }
