@@ -41,7 +41,6 @@ import java.util.zip.DeflaterOutputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
-import com.iborg.robo.client.RoboClient;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.

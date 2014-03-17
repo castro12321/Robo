@@ -40,15 +40,12 @@ import com.iborg.hsocket.ISocket;
 
 public class RoboClientWindow
 {
-	private final RoboClient robocient;
 	private JFrame resizeBorder = new JFrame();
 	private JFrame window       = new JFrame();
 	private Character resizing        = null;
 	
 	public RoboClientWindow(final RoboClient roboclient, final ISocket socket)
 	{
-		this.robocient = roboclient;
-		
 		resizeBorder.getContentPane().setBackground(Color.WHITE);
 		resizeBorder.setVisible(false);
 		

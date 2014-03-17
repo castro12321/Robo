@@ -29,7 +29,6 @@ import java.awt.Robot;
 
 import com.iborg.hsocket.IServerSocket;
 import com.iborg.hsocket.ISocket;
-import com.iborg.robo.client.RoboClient;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
