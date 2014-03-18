@@ -98,7 +98,6 @@ public class RoboClientWindow
 	
 	protected void windowResized(Component resized)
 	{
-		// oldSize = resized.getBounds();
 	}
 	
 	

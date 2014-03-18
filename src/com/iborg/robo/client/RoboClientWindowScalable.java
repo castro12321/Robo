@@ -30,7 +30,7 @@ import com.iborg.hsocket.ISocket;
 
 public class RoboClientWindowScalable extends RoboClientWindow implements ActionListener
 {
-	private Timer recalculateTimer  = new Timer(350, this);
+	private Timer recalculateTimer  = new Timer(500, this);
 	
 	
 	public RoboClientWindowScalable(final RoboClient roboclient, final ISocket socket)
@@ -50,8 +50,6 @@ public class RoboClientWindowScalable extends RoboClientWindow implements Action
 			recalculateTimer.restart();
 		else
 			recalculateTimer.start();
-		
-		super.windowResized(resized);
 	}
 	
 	
