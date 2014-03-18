@@ -24,44 +24,27 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import com.iborg.hsocket.ISocket;
 
 public class RoboClientWindowScalable extends RoboClientWindow implements ActionListener
 {
-	protected JFrame resizingWindow = new JFrame();
-	private Timer recalculateTimer  = new Timer(250, this);
+	private Timer recalculateTimer  = new Timer(350, this);
 	
 	
 	public RoboClientWindowScalable(final RoboClient roboclient, final ISocket socket)
     {
 		super(roboclient, socket);
 		recalculateTimer.setRepeats(false);
-		resizingWindow.setBounds(oldSize);
-		resizingWindow.setVisible(false);
     }
-	
-	
-	@Override
-	protected void windowMoved()
-	{
-		resizingWindow.setBounds(window.getBounds());
-	}
 	
 	
 	@Override
 	protected void windowResized(Component resized)
 	{
-		resizingWindow.setVisible(true);
-		
 		Rectangle newSize = resized.getBounds();
-		RoboClient.log("new: " + oldSize.x + " " + oldSize.y + " " + oldSize.width + " " + oldSize.height);
 		RoboClient.log("new: " + newSize.x + " " + newSize.y + " " + newSize.width + " " + newSize.height);
-		
-		resizingWindow.setBounds(newSize);
-		adjustSizeToAspectRatio(resizingWindow);
 		
 		if(recalculateTimer.isRunning())
 			recalculateTimer.restart();
@@ -80,8 +63,6 @@ public class RoboClientWindowScalable extends RoboClientWindow implements Action
 	private void resizeFinished()
 	{
 		RoboClient.log("Resize done");
-		resizingWindow.setVisible(false);
-		oldSize = resizingWindow.getBounds();
-		window.setBounds(oldSize);
+		adjustSizeToAspectRatio(window);
 	}
 }

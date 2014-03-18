@@ -98,14 +98,18 @@ public class RoboClientWindow
 	
 	protected void windowResized(Component resized)
 	{
-		oldSize = resized.getBounds();
+		// oldSize = resized.getBounds();
 	}
 	
 	
 	protected void adjustSizeToAspectRatio(JFrame frame)
 	{
 		Rectangle windowSize = window.getBounds();
-		windowSize.height = (int) ((float) windowSize.width * ratioY);
+		if(windowSize.width != oldSize.width)
+			windowSize.height = (int) ((float) windowSize.width  * ratioY);
+		else if(windowSize.height != oldSize.height)
+			windowSize.width  = (int) ((float) windowSize.height * ratioX);
 		frame.setBounds(windowSize);
+		oldSize = windowSize;
 	}
 }
