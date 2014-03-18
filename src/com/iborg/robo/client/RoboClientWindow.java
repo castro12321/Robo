@@ -56,10 +56,9 @@ class RoboJFrame extends JFrame
 public class RoboClientWindow
 {
 	private JFrame window      = new RoboJFrame(this);
-	protected final float sizeRatio;
-	protected final Rectangle originalSize;
-	protected       Rectangle oldSize;
-	private         boolean   resizing;
+	protected final float ratioX, ratioY;
+	protected Rectangle   oldSize;
+	protected boolean     resizing;
 	
 	
 	public RoboClientWindow(final RoboClient roboclient, final ISocket socket)
@@ -87,9 +86,10 @@ public class RoboClientWindow
 		});
 		
 		// Calculate main window size
-		originalSize = oldSize = window.getBounds();
-		sizeRatio    = ((float)originalSize.width) / ((float)originalSize.height);
-		RoboClient.log("Original size: " + originalSize.width + " " + originalSize.height + " ratio: " + sizeRatio);
+		oldSize = window.getBounds();
+		ratioX = (float) oldSize.width  / (float) oldSize.height;
+		ratioY = (float) oldSize.height / (float) oldSize.width;
+		RoboClient.log("Original size: " + oldSize.width + " " + oldSize.height + " ratio: " + ratioX + " " + ratioY);
 	}
 	
 	
@@ -119,14 +119,10 @@ public class RoboClientWindow
 		RoboClient.log("last: " + oldSize.width + " " + oldSize.height + " " + resizing);
 		RoboClient.log("bound: " + newSize.x + " " + newSize.y + " " + newSize.width + " " + newSize.height);
 		
-		if(newSize.width != oldSize.width)
-		{
+		if(newSize.width  != oldSize.width
+		|| newSize.height != oldSize.height)
 			resizing = true;
-		}
-		else if(newSize.height != oldSize.height)
-		{
-			resizing = true;
-		}
+		resizingWindow.setBound(newSize);
 		
 		if(resizing == 'x')
 		{
@@ -145,14 +141,23 @@ public class RoboClientWindow
 	
 	void resizeDone()
 	{
-		if(resizing)
-			;
-		if(resizing != null) // window has been resized
+		if(resizing) // window has been resized
 		{
 			// Take additional actions
 			// resize main window to fit resizeWindow
 			// hide resize window
 			resizing = false;
 		}
+	}
+	
+	
+	void adjustSizeToAspectRatio(JFrame window)
+	{
+		Rectangle windowSize = window.getBounds();
+		final float newRatioX = (float) windowSize.width  / (float) windowSize.height;
+		final float newRatioY = (float) windowSize.height / (float) windowSize.width;
+		
+		if(newRatioX > ratioX)
+			;
 	}
 }
