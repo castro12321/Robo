@@ -19,10 +19,13 @@
 
 package com.iborg.robo.client;
 
+import java.awt.AlphaComposite;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -138,9 +141,19 @@ public class RoboClientScreenCanvas extends Canvas {
         paint(g);
     }
     
-    public void paint(Graphics g) {
+    @Override
+    public void paint(Graphics g)
+    {
+    	paint((Graphics2D)g);
+    }
+    public void paint(Graphics2D g) {
         if(image != null) {
             Dimension d = this.getSize();
+            
+            g.setComposite(AlphaComposite.Src);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
             RoboClientProcessor target = roboClient.processor;
             offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, 0, 0, target.width, target.height, null);
