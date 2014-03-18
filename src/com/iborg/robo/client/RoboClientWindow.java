@@ -22,7 +22,6 @@ package com.iborg.robo.client;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
@@ -35,30 +34,12 @@ import javax.swing.JFrame;
 
 import com.iborg.hsocket.ISocket;
 
-class RoboJFrame extends JFrame
-{
-    private static final long serialVersionUID = 1L;
-	private final RoboClientWindow roboWindow;
-	
-	RoboJFrame(RoboClientWindow roboWindow)
-	{
-		this.roboWindow = roboWindow;
-	}
-	
-	@Override
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-		roboWindow.resizeDone();
-	}
-}
 
 public class RoboClientWindow
 {
-	private JFrame window      = new RoboJFrame(this);
+	protected final JFrame window = new JFrame();
 	protected final float ratioX, ratioY;
-	protected Rectangle   oldSize;
-	protected boolean     resizing;
+	protected Rectangle oldSize;
 	
 	
 	public RoboClientWindow(final RoboClient roboclient, final ISocket socket)
@@ -74,15 +55,13 @@ public class RoboClientWindow
 		window.setVisible(true);
 		window.addWindowListener(new WindowAdapter()
 		{	@Override public void windowClosing(WindowEvent e)
-			{
-				RoboClientWindow.this.windowClosing(roboclient, socket);
-			}
+			{ RoboClientWindow.this.windowClosing(roboclient, socket); }
 		});
 		window.addComponentListener(new ComponentAdapter()
-		{	@Override public void componentResized(ComponentEvent e)
-			{
-				windowResized(e.getComponent());
-			}
+		{	@Override public void componentMoved(ComponentEvent e)
+			{ windowMoved(); }
+			@Override public void componentResized(ComponentEvent e)
+			{ windowResized(e.getComponent()); }
 		});
 		
 		// Calculate main window size
@@ -108,56 +87,25 @@ public class RoboClientWindow
 		catch(IOException ioe)
 		{}
 		window.dispose();
-		window = null;
 		robo.stop();
+	}
+	
+	
+	protected void windowMoved()
+	{
 	}
 	
 	
 	protected void windowResized(Component resized)
 	{
-		Rectangle newSize = resized.getBounds();
-		RoboClient.log("last: " + oldSize.width + " " + oldSize.height + " " + resizing);
-		RoboClient.log("bound: " + newSize.x + " " + newSize.y + " " + newSize.width + " " + newSize.height);
-		
-		if(newSize.width  != oldSize.width
-		|| newSize.height != oldSize.height)
-			resizing = true;
-		resizingWindow.setBound(newSize);
-		
-		if(resizing == 'x')
-		{
-			oldWidth = newSize.width;
-			newSize.height = (int) ((float) newSize.width * ratioY);
-		}
-		if(resizing == 'y')
-		{
-			newSize.width = (int) ((float) newSize.height * ratioX);
-			oldHeight = newSize.height;
-		}
-		
-		window.setBounds(newSize);
+		oldSize = resized.getBounds();
 	}
 	
 	
-	void resizeDone()
-	{
-		if(resizing) // window has been resized
-		{
-			// Take additional actions
-			// resize main window to fit resizeWindow
-			// hide resize window
-			resizing = false;
-		}
-	}
-	
-	
-	void adjustSizeToAspectRatio(JFrame window)
+	protected void adjustSizeToAspectRatio(JFrame frame)
 	{
 		Rectangle windowSize = window.getBounds();
-		final float newRatioX = (float) windowSize.width  / (float) windowSize.height;
-		final float newRatioY = (float) windowSize.height / (float) windowSize.width;
-		
-		if(newRatioX > ratioX)
-			;
+		windowSize.height = (int) ((float) windowSize.width * ratioY);
+		frame.setBounds(windowSize);
 	}
 }

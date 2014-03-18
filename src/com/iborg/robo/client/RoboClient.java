@@ -50,7 +50,7 @@ public class RoboClient extends Applet {
     
     public void createUserInterface() {
     	screenCanvas = new RoboClientScreenCanvas(this);
-        window = new RoboClientWindow(this, socket);
+        window = new RoboClientWindowScalable(this, socket);
     }
     
     public void startCapture() {
