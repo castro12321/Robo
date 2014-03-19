@@ -47,7 +47,7 @@ public class RoboClientScreenCanvas extends Canvas {
     public Graphics imageGraphics;
     
     private Image offScreenImage;
-    private Graphics offScreenGraphics;
+    private Graphics2D offScreenGraphics;
     
     private RoboClient roboClient;
     
@@ -118,7 +118,7 @@ public class RoboClientScreenCanvas extends Canvas {
             public void componentResized(ComponentEvent e) {
                 roboClient.processor.adjustScale();
                 offScreenImage = createImage(getSize().width, getSize().height);
-                offScreenGraphics = offScreenImage.getGraphics();
+                offScreenGraphics = (Graphics2D) offScreenImage.getGraphics();
                 roboClient.processor.adjustScale();
             }
         });
@@ -150,10 +150,10 @@ public class RoboClientScreenCanvas extends Canvas {
         if(image != null) {
             Dimension d = this.getSize();
             
-            g.setComposite(AlphaComposite.Src);
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+            offScreenGraphics.setComposite(AlphaComposite.Src);
+            offScreenGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            offScreenGraphics.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_SPEED);
+            //g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             
             RoboClientProcessor target = roboClient.processor;
             offScreenGraphics.drawImage(image, 0, 0, d.width, d.height, 0, 0, target.width, target.height, null);
