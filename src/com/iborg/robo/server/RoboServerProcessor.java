@@ -41,6 +41,7 @@ import java.util.zip.DeflaterOutputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
+import com.iborg.robo.client.RoboClient;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -88,10 +89,13 @@ public class RoboServerProcessor extends Thread {
     {
     	if(interrupted())
     	{
+    		RoboClient.log("[RSP] interrupted().");
     		try
         	{
         		os.write(RoboProtocol.CONNECTION_CLOSED);
         		os.flush();
+        		is.close();
+        		os.close();
         	}
         	catch(IOException e) {}
     		return true;

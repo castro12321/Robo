@@ -20,6 +20,10 @@
 package com.iborg.robo.client;
 
 import java.applet.Applet;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;

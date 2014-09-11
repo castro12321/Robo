@@ -29,6 +29,7 @@ import java.awt.Robot;
 
 import com.iborg.hsocket.IServerSocket;
 import com.iborg.hsocket.ISocket;
+import com.iborg.robo.client.RoboClient;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -51,12 +52,13 @@ public class RoboServerListener extends Thread {
         try {
             while(true) {
                 ISocket s = serverSocket.accept();
-                
+                RoboClient.log("[C] Got connection.");
                 if(client != null)
                 	client.kill();
-                	
+                RoboClient.log("[C] Killed old.");	
                 client = new RoboServerProcessor(s, robot);
                 client.start();
+                RoboClient.log("[C] Added new");
             }
         } catch (Exception e) {
             System.err.println(e);
