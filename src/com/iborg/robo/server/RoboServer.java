@@ -22,50 +22,84 @@ package com.iborg.robo.server;
 import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.Robot;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import com.iborg.hsocket.IServerSocket;
 import com.iborg.robo.RoboProtocol;
 import com.iborg.robo.TcpServerSocketFactory;
 import com.iborg.util.ConfigFile;
-/** 
- *
- * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
- * @version 
+
+/**
+ * 
+ * @author <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
+ * @version
  */
 
-public class RoboServer {
-    
-    public static void main(String args[]) throws AWTException {
-        String fileName = "Robo.cfg";
-        if(args.length > 0) {
-            fileName = args[0];
-        }
-        try {
-            ConfigFile.process(fileName);
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
-
-        // this seems to be neccessary for java.awt.Robot
-        Frame frame = new Frame("RoboServer");
-        frame.setVisible(true);
-        frame.dispose();
-
-        // create server socket
-        IServerSocket serverSocket = null;
-        String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
-        if("tcp".equalsIgnoreCase(connectionType)) {
-            serverSocket = TcpServerSocketFactory.createServerSocket();
-        } else {
-            System.err.println("Unknown connection type " + connectionType);
-        }
-        
-        if(serverSocket != null) {
-            // create a robot to feed in GUI events
-            Robot robot = new Robot();
-            //listen for connections
-            new RoboServerListener(robot, serverSocket);
-        }
-    }
+public class RoboServer
+{
+	
+	private static PrintWriter logger = null;
+	
+	public static void log(String msg)
+	{
+		System.out.println("[S] " + msg);
+		try
+		{
+    		if(logger == null)
+    			logger = new PrintWriter(new BufferedWriter(new FileWriter("RoboServerLog", true)));
+    		if(logger != null)
+    		{
+        		logger.println("[S] " + msg);
+    		    logger.close();
+    		}
+		} catch (IOException e) {
+			System.out.println("[S] ERROR: Cannot write to the log file");
+		}
+	}
+	
+	
+	public static void main(String args[]) throws AWTException
+	{
+		log("Starting Robo server");
+		String fileName = "Robo.cfg";
+		if(args.length > 0)
+			fileName = args[0];
+		log("Loading config; path=" + fileName);
+		try
+		{
+			ConfigFile.process(fileName);
+		}
+		catch(IOException ioe)
+		{
+			System.err.println(ioe);
+		}
+		
+		// this seems to be neccessary for java.awt.Robot
+		Frame frame = new Frame("RoboServer");
+		frame.setVisible(true);
+		frame.dispose();
+		
+		// create server socket
+		IServerSocket serverSocket = null;
+		String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
+		log("Preparing server socket with connectionType=" + connectionType);
+		if("tcp".equalsIgnoreCase(connectionType))
+			serverSocket = TcpServerSocketFactory.createServerSocket();
+		else
+			System.err.println("Unknown connection type " + connectionType);
+		
+		if(serverSocket != null)
+		{
+			log("Server socket ready. Starting listener");
+			// create a robot to feed in GUI events
+			Robot robot = new Robot();
+			// listen for connections
+			new RoboServerListener(robot, serverSocket);
+		}
+		else
+			log("ERROR: Cannot create serverSocket!");
+	}
 }

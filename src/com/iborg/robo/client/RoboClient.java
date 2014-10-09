@@ -20,10 +20,6 @@
 package com.iborg.robo.client;
 
 import java.applet.Applet;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
@@ -70,13 +66,13 @@ public class RoboClient extends Applet {
     
     public void init()
     {
-    	log("init1");
+    	log("Starting client...");
     	String host = getParameter(RoboProtocol.paramHost);
-    	log("init2 " + host);
+    	log("host=" + host);
     	int port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
-    	log("init3 " + port);
+    	log("port=" + port);
     	pass = getParameter(RoboProtocol.paramPassword);
-    	log("init4 " + pass);
+    	log("pass=" + pass);
         try {
         	socket = new TcpSocket(host, port);
         } catch (Exception e) {
@@ -99,7 +95,7 @@ public class RoboClient extends Applet {
     {
     	if(!debug)
     		return;
-    	System.out.println(msg);
+    	System.out.println("[C] " + msg);
     }
     
 }

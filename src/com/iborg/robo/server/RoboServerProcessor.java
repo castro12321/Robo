@@ -131,6 +131,7 @@ public class RoboServerProcessor extends Thread {
             System.err.println(e);
         }
         
+        RoboServer.log("Did client login? " + loggedIn);
         
         if(loggedIn) {
             while(true) {
@@ -190,6 +191,7 @@ public class RoboServerProcessor extends Thread {
     
     private synchronized void sendLoginRequest() {
         try {
+        	RoboServer.log("Sending login request");;
             os.write(RoboProtocol.REQUEST_LOGIN);
             loginMask = (new Date()).getTime();
             DataOutputStream dos = new DataOutputStream(os);
@@ -203,6 +205,7 @@ public class RoboServerProcessor extends Thread {
     
     private synchronized void sendLoginFailed() {
         try {
+        	RoboServer.log("Login failed");
             os.write(RoboProtocol.LOGIN_FAILED);
             os.flush();
         } catch (Exception e) {
@@ -212,6 +215,7 @@ public class RoboServerProcessor extends Thread {
     
     private synchronized void sendLoginSuccessful() {
         try {
+        	RoboServer.log("Login successful");
             os.write(RoboProtocol.LOGIN_SUCCESSFUL);
             os.flush();
         } catch (Exception e) {
@@ -221,7 +225,12 @@ public class RoboServerProcessor extends Thread {
     
     private boolean verifyPassword(int command, byte [] msg) {
         String password = System.getProperty(RoboProtocol.paramPassword);
-        if(command == RoboProtocol.LOGIN_MESSAGE_DIGEST) {
+        RoboServer.log("Password needed=" + password);
+        
+        if(command == RoboProtocol.LOGIN_MESSAGE_DIGEST)
+        {
+        	RoboServer.log("Processing ciphered password; received ciphered pass=" + msg);
+        	
             try {
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
                 
@@ -240,14 +249,17 @@ public class RoboServerProcessor extends Thread {
                     }
                     return true;
                 }
+                return false;
             } catch (Exception e) {
                 e.printStackTrace(System.err);
+                return false;
             }
-        } else {
+        }
+        else
+        {
+        	RoboServer.log("Not ciphered password processing; pass=" + msg);
             return((new String(msg)).equals(password));
         }
-        return false;
-        
     }
     
     private boolean processLogin(int command) {

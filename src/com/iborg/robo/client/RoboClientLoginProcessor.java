@@ -74,13 +74,16 @@ public class RoboClientLoginProcessor extends Thread {
                 int command = is.read();
                 switch(command) {
                     case RoboProtocol.REQUEST_LOGIN:
+                    	RoboClient.log("Got login request");
                         login();
                         break;
                     case RoboProtocol.LOGIN_SUCCESSFUL:
+                    	RoboClient.log("Got login successful");
                         loginSuccesful();
                         loop = false;
                         break;
                     case RoboProtocol.LOGIN_FAILED:
+                    	RoboClient.log("Got login failed");
                         loginFailed();
                         loop = false;
                         break;
