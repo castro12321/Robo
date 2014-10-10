@@ -33,15 +33,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
-import com.iborg.robo.client.RoboClient;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -83,210 +80,67 @@ public class RoboServerProcessor extends Thread {
     	interrupt();
     }
     
-    
-    // Returns whether handled interrupted() or not
-    public synchronized boolean handleInterrupted()
+    public synchronized void cleanup()
     {
-    	if(interrupted())
+    	RoboServer.log("Thread: Socket cleanup.");
+		try
     	{
-    		RoboClient.log("[RSP] interrupted().");
-    		try
-        	{
-        		os.write(RoboProtocol.CONNECTION_CLOSED);
-        		os.flush();
-        		is.close();
-        		os.close();
-        	}
-        	catch(IOException e) {}
-    		return true;
+    		os.write(RoboProtocol.CONNECTION_CLOSED);
+    		os.flush();
+    		is.close();
+    		os.close();
     	}
-    	return false;
+    	catch(IOException e) {}
     }
-    
     
     // main loop
-    public void run() {
-        
-        int loginCounter = 3;
-        try {
-            while(!loggedIn) {
-                sendLoginRequest();
-                int command = is.read();
-                
-                if(handleInterrupted())
-                	return;
-                
-                if(command == RoboProtocol.LOGIN || command == RoboProtocol.LOGIN_MESSAGE_DIGEST) {
-                    loggedIn = processLogin(command);
-                } else {
-                    break;
-                }
-                loginCounter--;
-                if(loginCounter <= 0) {
-                    sendLoginFailed();
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        
+	public void run()
+	{
+        RoboServerLoginProcessor loginProcessor = new RoboServerLoginProcessor(is, os, this);
+        loggedIn = loginProcessor.run();
+       
         RoboServer.log("Did client login? " + loggedIn);
-        
-        if(loggedIn) {
-            while(true) {
-                try {
-                    int command = is.read();
-                    
-                    if(handleInterrupted())
-                    	return;
-                    
-                    switch(command) {
-                        case RoboProtocol.SCREEN_REQUEST:
-                            screen();
-                            break;
-                        case RoboProtocol.MOUSE_MOVED:
-                            mouseMoved();
-                            break;
-                        case RoboProtocol.MOUSE_PRESSED:
-                            mousePressed();
-                            break;
-                        case RoboProtocol.MOUSE_RELEASED:
-                            mouseReleased();
-                            break;
-                        case RoboProtocol.KEY_PRESSED:
-                            keyPressed();
-                            break;
-                        case RoboProtocol.KEY_RELEASED:
-                            keyReleased();
-                            break;
-                        case RoboProtocol.SCREEN_PARAM_REQUEST:
-                            sendScreenParam();
-                            break;
-                        case RoboProtocol.SCREEN_SET_COMMUNICATION_PARAMETERS:
-                            setComParams();
-                            break;
-                        case -1:
-                            try {
-                                Thread.sleep(1000);
-                            } catch (Exception e) {
-                            }
-                            break;
-                        default:
-                            System.err.println("unknown command " + command);
-                            break;
-                    }
-                } catch (Exception e) {
-                    System.err.println(e);
+        if(loggedIn)
+        	while(handleNextCommand())
+        		;
+        cleanup();
+    }
+    
+    private boolean handleNextCommand()
+    {
+		try
+		{
+			int command = is.read();
+			
+			if(interrupted())
+				return false;
+			
+			switch(command)
+			{
+                case RoboProtocol.SCREEN_REQUEST: screen(); break;
+                case RoboProtocol.MOUSE_MOVED: mouseMoved(); break;
+                case RoboProtocol.MOUSE_PRESSED: mousePressed(); break;
+                case RoboProtocol.MOUSE_RELEASED: mouseReleased(); break;
+                case RoboProtocol.KEY_PRESSED: keyPressed(); break;
+                case RoboProtocol.KEY_RELEASED: keyReleased(); break;
+                case RoboProtocol.SCREEN_PARAM_REQUEST: sendScreenParam(); break;
+                case RoboProtocol.SCREEN_SET_COMMUNICATION_PARAMETERS: setComParams(); break;
+                case -1:
+                	RoboServer.log("Got -1 message.");
+                    try { Thread.sleep(1000); } catch (Exception e) {}
                     break;
-                }
-            }
-        }
-    }
-    
-    
-    
-    // send functions
-    long loginMask;             // challenge for messageDigest login
-    
-    private synchronized void sendLoginRequest() {
-        try {
-        	RoboServer.log("Sending login request");;
-            os.write(RoboProtocol.REQUEST_LOGIN);
-            loginMask = (new Date()).getTime();
-            DataOutputStream dos = new DataOutputStream(os);
-            dos.writeLong(loginMask);
-            dos.flush();
-            os.flush();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
-    
-    private synchronized void sendLoginFailed() {
-        try {
-        	RoboServer.log("Login failed");
-            os.write(RoboProtocol.LOGIN_FAILED);
-            os.flush();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
-    
-    private synchronized void sendLoginSuccessful() {
-        try {
-        	RoboServer.log("Login successful");
-            os.write(RoboProtocol.LOGIN_SUCCESSFUL);
-            os.flush();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
-    
-    private boolean verifyPassword(int command, byte [] msg) {
-        String password = System.getProperty(RoboProtocol.paramPassword);
-        RoboServer.log("Password needed=" + password);
-        
-        if(command == RoboProtocol.LOGIN_MESSAGE_DIGEST)
-        {
-        	RoboServer.log("Processing ciphered password; received ciphered pass=" + msg);
-        	
-            try {
-                MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
-                
-                String secret = password + loginMask;
-                
-                byte [] buffer = secret.getBytes();
-                
-                messageDigest.update(buffer);
-                
-                byte[] digest = messageDigest.digest();
-                
-                if(digest.length == msg.length) {
-                    for(int i=0; i<digest.length; i++) {
-                        if(digest[i] != msg[i])
-                            return false;
-                    }
+                default:
+                    System.err.println("unknown command " + command);
                     return true;
-                }
-                return false;
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
-                return false;
-            }
-        }
-        else
-        {
-        	RoboServer.log("Not ciphered password processing; pass=" + msg);
-            return((new String(msg)).equals(password));
-        }
-    }
-    
-    private boolean processLogin(int command) {
-        try {
-            DataInputStream dis = new DataInputStream(is);
-            int length = dis.readInt();
-            byte [] buffer = new byte[length];
-            int counter = 0;
-            while(counter < length) {
-                int r = is.read(buffer, counter, length - counter);
-                if(r == -1) {
-                    break;
-                }
-                counter += r;
-            }
-            
-            if(verifyPassword(command, buffer)) {
-                
-                sendLoginSuccessful();
-                
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-        }
-        return false;
+			}
+		}
+		catch(Exception e)
+		{
+			System.err.println(e);
+			return false;
+		}
+		
+		return true;
     }
     
     private void sendColorModel(DirectColorModel directColorModel) {
@@ -623,7 +477,4 @@ public class RoboServerProcessor extends Thread {
         maxSend = dis.readInt();
         maxScreenUpdateChunk = dis.readInt();
     }
-    
-    
 }
-
