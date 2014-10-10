@@ -29,12 +29,12 @@ import java.awt.Robot;
 
 import com.iborg.hsocket.IServerSocket;
 import com.iborg.hsocket.ISocket;
-/** 
- *
- * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
- * @version 
- */
 
+/**
+ * Waits for new client connections.
+ * When new client connects, the previously connected client is killed
+ * so that only one client can be connected at a time
+ */
 public class RoboServerListener extends Thread {
     Robot robot;
     IServerSocket serverSocket;

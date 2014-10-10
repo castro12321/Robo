@@ -161,7 +161,6 @@ public class RoboClientLoginProcessor extends Thread {
         Button okButton = new Button("OK");
         Button cancelButton = new Button("Cancel");
         
-        
         maxPixelsField.setText(Integer.toString(maxPixels));
         maxUpdateChunkField.setText(Integer.toString(maxUpdateChunk));
         
@@ -234,12 +233,8 @@ public class RoboClientLoginProcessor extends Thread {
         centerFrame(dialog);
         dialog.setVisible(true);
         
-        
         System.out.println("action " + maxUpdateChunk + " " + maxPixels);
-        
     }
-    
-    
     
     private synchronized void sendLogin(int command, byte [] buffer) {
         try {
@@ -302,6 +297,4 @@ public class RoboClientLoginProcessor extends Thread {
         
         roboClient.stop();
     }
-    
 }
-

@@ -9,8 +9,16 @@ import java.util.Date;
 
 import com.iborg.robo.RoboProtocol;
 
+/**
+ * Manages the logging process:
+ * - Ask user for password
+ * - Receive password
+ * - Check if valid
+ * - Response to the user
+ */
 public class RoboServerLoginProcessor
 {
+	private long loginMask; // challenge for messageDigest login
 	private final InputStream  is;
 	private final OutputStream os;
 	private final RoboServerProcessor parentProcessor;
@@ -23,11 +31,12 @@ public class RoboServerLoginProcessor
 		this.parentProcessor = parentProcessor;
 	}
 	
-	
 	/**
-	 * Runs the login process: - Ask user for password - Receive password -
-	 * Check if valid - Response to the user
-	 * 
+	 * Runs the process described in the main comment:
+	 * - Ask user for password
+	 * - Receive password
+	 * - Check if valid
+	 * - Response to the user
 	 * @return Whether user logged in successfuly or not
 	 */
 	public boolean run()
@@ -67,9 +76,6 @@ public class RoboServerLoginProcessor
 		return loggedIn;
 	}
 	
-	// send functions
-	long loginMask; // challenge for messageDigest login
-	                
 	
 	private synchronized void sendLoginRequest()
 	{
