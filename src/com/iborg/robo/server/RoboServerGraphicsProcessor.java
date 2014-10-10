@@ -198,7 +198,6 @@ public class RoboServerGraphicsProcessor
             writeInts(pixels[newScreen], width, height, x, y, w, h);
             adjustmentArrayOutputStream.flush();
             
-            
             if(maxScreenUpdateChunk != -1 && adjustmentArrayOutputStream.size() > maxScreenUpdateChunk) {
                 endSend(RoboProtocol.SCREEN_RESPONSE_PART);
                 resetSendParams();

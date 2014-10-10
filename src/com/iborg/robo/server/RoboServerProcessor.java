@@ -181,5 +181,6 @@ public class RoboServerProcessor extends Thread
         DataInputStream dis = new DataInputStream(is);
         graphicsProcessor.maxSend = dis.readInt();
         graphicsProcessor.maxScreenUpdateChunk = dis.readInt();
+        RoboServer.log("Setting comm params: " + graphicsProcessor.maxSend + "; " + graphicsProcessor.maxScreenUpdateChunk);
     }
 }
