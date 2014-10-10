@@ -39,40 +39,39 @@ import java.util.zip.DeflaterOutputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
-/**
- *
- * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
- * @version
- */
 
-public class RoboServerProcessor extends Thread {
-	
-    InputStream is;
-    OutputStream os;
-    Robot robot;
-    Rectangle screenRect;
-    int newScreen = -1;
-    int oldScreen = -1;
-    int pixels[][];
-    int width;
-    int height;
-    int stripsSent;
-    BufferedImage image;
-    boolean loggedIn = false;
-    int maxSend = 100000;
-    int maxScreenUpdateChunk = 500000;
+public class RoboServerProcessor extends Thread
+{
+	private InputStream is;
+	private OutputStream os;
+	private Robot robot;
+	private Rectangle screenRect;
+	private int newScreen = -1;
+	private int oldScreen = -1;
+	private int pixels[][];
+	private int width;
+	private int height;
+	private int stripsSent;
+	private BufferedImage image;
+	private int maxSend = 100000;
+	private int maxScreenUpdateChunk = 500000;
     
-    RoboServerProcessor(ISocket s, Robot robot) {
-        this.robot = robot;
-        try {
-            os = s.getOutputStream();
-            is = s.getInputStream();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenDimension = toolkit.getScreenSize();
-        screenRect = new Rectangle(0, 0, screenDimension.width, screenDimension.height);
+	
+	RoboServerProcessor(ISocket s, Robot robot)
+	{
+		this.robot = robot;
+		try
+		{
+			os = s.getOutputStream();
+			is = s.getInputStream();
+		}
+		catch(Exception e)
+		{
+			System.err.println(e);
+		}
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Dimension screenDimension = toolkit.getScreenSize();
+		screenRect = new Rectangle(0, 0, screenDimension.width, screenDimension.height);
     }
     
     public void kill()
@@ -97,7 +96,7 @@ public class RoboServerProcessor extends Thread {
 	public void run()
 	{
         RoboServerLoginProcessor loginProcessor = new RoboServerLoginProcessor(is, os, this);
-        loggedIn = loginProcessor.run();
+        boolean loggedIn = loginProcessor.run();
        
         RoboServer.log("Did client login? " + loggedIn);
         if(loggedIn)
