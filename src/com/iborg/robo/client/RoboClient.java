@@ -30,7 +30,8 @@ import com.iborg.robo.RoboProtocol;
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
  * @version 
  */
-public class RoboClient extends Applet {
+public class RoboClient extends Applet
+{
 	private static final long serialVersionUID = 1L;
     
     RoboClientScreenCanvas screenCanvas;
@@ -38,7 +39,7 @@ public class RoboClient extends Applet {
     RoboClientWindow window;
     
     // Connection
-    String pass;
+    String pass2;
     private ISocket socket;
     
     public RoboClient()
@@ -53,41 +54,41 @@ public class RoboClient extends Applet {
     public void startCapture() {
         processor = new RoboClientProcessor(socket, this);
         createUserInterface();
-        (processor).run();
+        processor.run();
     }
     
-    public void startLogin() {
-        (new RoboClientLoginProcessor(socket, this)).run();
+	
+	@Override
+	public void start()
+	{
+		log("Starting client...");
+    	String host = getParameter(RoboProtocol.paramHost);
+    	String port = getParameter(RoboProtocol.paramPort);
+    	String pass = getParameter(RoboProtocol.paramPassword);
+    	log("host=" + host);
+    	log("port=" + port);
+    	log("pass=" + pass);
+		
+		try
+		{
+			socket = new TcpSocket(host, Integer.parseInt(port));
+			new RoboClientLoginProcessor(socket, this, pass).run();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
     }
     
     @Override
     public void init()
     {
-    	log("Starting client...");
-    	String host = getParameter(RoboProtocol.paramHost);
-    	log("host=" + host);
-    	int port = Integer.parseInt(getParameter(RoboProtocol.paramPort));
-    	log("port=" + port);
-    	pass = getParameter(RoboProtocol.paramPassword);
-    	log("pass=" + pass);
-        try {
-        	socket = new TcpSocket(host, port);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-    }
-    
-    @Override
-    public void start() {
-        startLogin();
-        //startCapture();
     }
     
     @Override
     public void stop()
     {
     }
-    
     
     private final static boolean debug = true;
     public static void log(String msg)
