@@ -35,37 +35,44 @@ import com.iborg.hsocket.ISocket;
  * When new client connects, the previously connected client is killed
  * so that only one client can be connected at a time
  */
-public class RoboServerListener extends Thread {
+public class RoboServerListener
+{
     Robot robot;
     IServerSocket serverSocket;
-    
     RoboServerProcessor client = null;
-    
-    public RoboServerListener(Robot robot, IServerSocket serverSocket) {
-        this.robot = robot;
-        this.serverSocket = serverSocket;
-        start();
-    }
-    
-    public void run() {
-        try {
-            while(true) {
-                ISocket s = serverSocket.accept();
-                RoboServer.log("Got connection. Processing");
-                
-                if(client != null)
-                {
-                	client.kill();
-                	RoboServer.log("Killed old connection.");
-                }
-                
-                client = new RoboServerProcessor(s, robot);
-                client.start();
-                RoboServer.log("Started new client");
-            }
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
+	
+	public RoboServerListener(Robot robot, IServerSocket serverSocket)
+	{
+		this.robot = robot;
+		this.serverSocket = serverSocket;
+	}
+
+
+	public void run()
+	{
+		try
+		{
+			while(true)
+			{
+				ISocket s = serverSocket.accept();
+				RoboServer.log("Got connection. Processing");
+				
+				if(client != null)
+				{
+					client.kill();
+					RoboServer.log("Killed old connection.");
+				}
+				
+				client = new RoboServerProcessor(s, robot);
+				client.start();
+				RoboServer.log("Started new client");
+			}
+		}
+		catch(Exception e)
+		{
+			System.err.println(e);
+			e.printStackTrace();
+		}
+	}
 }
 
