@@ -140,7 +140,7 @@ public class RoboClientLoginProcessor
                 //byte[] digest = messageDigest.digest();
                 getMethodParams = null;
                 method = classMessageDigest.getMethod("digest", getMethodParams);
-                byte [] digest = (byte []) method.invoke(messageDigest, null);
+                byte [] digest = (byte []) method.invoke(messageDigest, (Object)null);
                 sendLogin(RoboProtocol.LOGIN_MESSAGE_DIGEST, digest);
                 return;
             } catch (Exception e) {
