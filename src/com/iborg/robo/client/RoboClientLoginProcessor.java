@@ -48,23 +48,30 @@ import com.iborg.robo.RoboProtocol;
  * @version
  */
 
-public class RoboClientLoginProcessor {
+public class RoboClientLoginProcessor
+{
+	private final RoboClient roboClient;
+	private final String password;
 	private InputStream is;
     private OutputStream os;
-    private RoboClient roboClient;
     private int maxPixels = -1;
     private int maxUpdateChunk = -1;
     
     
-    RoboClientLoginProcessor(ISocket s, RoboClient roboClient) {
-        try {
-            os= s.getOutputStream();
-            is = s.getInputStream();
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-        this.roboClient = roboClient;
-    }
+	RoboClientLoginProcessor(ISocket s, RoboClient roboClient, String password)
+	{
+		this.password = password;
+		this.roboClient = roboClient;
+		try
+		{
+			os = s.getOutputStream();
+			is = s.getInputStream();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
     
     public void run() {
         
@@ -107,8 +114,8 @@ public class RoboClientLoginProcessor {
         } catch (Exception e) {
         }
         
-        String secret = roboClient.pass;
-        RoboClient.log("Got password: " + secret);
+        RoboClient.log("Got password: " + password);
+        
         try {
             try {
                 //java.security.MessageDigest messageDigest = java.security.MessageDigest.getInstance("SHA-1");
@@ -121,7 +128,7 @@ public class RoboClientLoginProcessor {
                 methodParam[0] = "SHA-1";
                 Object messageDigest = method.invoke(null, methodParam);
                 
-                String msg = secret + loginMask;
+                String msg = password + loginMask;
                 byte [] buffer = msg.getBytes();
                 
                 // messageDigest.update(buffer);
@@ -139,10 +146,10 @@ public class RoboClientLoginProcessor {
             } catch (Exception e) {
                 System.err.println(e);
             }
-            sendLogin(RoboProtocol.LOGIN, secret.getBytes());
+            sendLogin(RoboProtocol.LOGIN, password.getBytes());
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            sendLogin(RoboProtocol.LOGIN, secret.getBytes());
+            sendLogin(RoboProtocol.LOGIN, password.getBytes());
         }
         
     }
