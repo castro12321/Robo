@@ -23,6 +23,7 @@
  * Created on March 25, 2002, 1:35 PM
  */
 package com.iborg.hsocket;
+
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -31,25 +32,32 @@ package com.iborg.hsocket;
 import java.net.*;
 import java.io.*;
 
-public class TcpSocket implements ISocket {
-    Socket socket;
-    
-    public TcpSocket(Socket socket) {
-        this.socket = socket;
-    }
-    public TcpSocket(String host, int port) throws UnknownHostException, IOException {
-        this.socket = new Socket(host, port);
-    }
-    public void close() throws IOException {
-        socket.close();
-    }
-    
-    public InputStream getInputStream() throws IOException {
-        return(socket.getInputStream());
-    }
-    
-    public OutputStream getOutputStream()  throws IOException {
-        return(socket.getOutputStream());
-    }
-    
+public class TcpSocket implements ISocket
+{
+	Socket socket;
+	
+	public TcpSocket(Socket socket)
+	{
+		this.socket = socket;
+	}
+	
+	public TcpSocket(String host, int port) throws UnknownHostException, IOException
+	{
+		this.socket = new Socket(host, port);
+	}
+	
+	public void close() throws IOException
+	{
+		socket.close();
+	}
+	
+	public InputStream getInputStream() throws IOException
+	{
+		return (socket.getInputStream());
+	}
+	
+	public OutputStream getOutputStream() throws IOException
+	{
+		return (socket.getOutputStream());
+	}
 }

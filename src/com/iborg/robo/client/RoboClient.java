@@ -24,13 +24,12 @@ import java.applet.Applet;
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
 import com.iborg.robo.RoboProtocol;
+
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
  * @version 
  */
-
-
 public class RoboClient extends Applet {
 	private static final long serialVersionUID = 1L;
     
@@ -45,8 +44,6 @@ public class RoboClient extends Applet {
     public RoboClient()
     {
     }
-    
-   
     
     public void createUserInterface() {
     	screenCanvas = new RoboClientScreenCanvas(this);
@@ -63,7 +60,7 @@ public class RoboClient extends Applet {
         (new RoboClientLoginProcessor(socket, this)).start();
     }
     
-    
+    @Override
     public void init()
     {
     	log("Starting client...");
@@ -80,11 +77,13 @@ public class RoboClient extends Applet {
         }
     }
     
+    @Override
     public void start() {
         startLogin();
         //startCapture();
     }
     
+    @Override
     public void stop()
     {
     }

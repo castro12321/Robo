@@ -37,7 +37,6 @@ import com.iborg.util.ConfigFile;
  * @author <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
  * @version
  */
-
 public class RoboServer
 {
 	
@@ -89,7 +88,7 @@ public class RoboServer
 		if("tcp".equalsIgnoreCase(connectionType))
 			serverSocket = TcpServerSocketFactory.createServerSocket();
 		else
-			System.err.println("Unknown connection type " + connectionType);
+			System.err.println("Unknown connection type: " + connectionType);
 		
 		if(serverSocket != null)
 		{

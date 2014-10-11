@@ -23,6 +23,7 @@
  * Created on March 25, 2002, 1:35 PM
  */
 package com.iborg.hsocket;
+
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -30,6 +31,7 @@ package com.iborg.hsocket;
  */
 import java.io.IOException;
 
-public interface IServerSocket {
-    public ISocket accept() throws IOException;
+public interface IServerSocket
+{
+	public ISocket accept() throws IOException;
 }

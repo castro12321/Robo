@@ -23,6 +23,7 @@
  * Created on March 25, 2002, 1:35 PM
  */
 package com.iborg.hsocket;
+
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -31,16 +32,18 @@ package com.iborg.hsocket;
 import java.net.*;
 import java.io.*;
 
-public class TcpServerSocket implements IServerSocket {
-    
-    ServerSocket serverSocket;
-    
-    public TcpServerSocket(int port) throws IOException {
-        serverSocket = new ServerSocket(port);
-    }
-    
-    public ISocket accept() throws IOException {
-        Socket socket = serverSocket.accept();
-        return new TcpSocket(socket);
-    }
+public class TcpServerSocket implements IServerSocket
+{
+	ServerSocket serverSocket;
+	
+	public TcpServerSocket(int port) throws IOException
+	{
+		serverSocket = new ServerSocket(port);
+	}
+	
+	public ISocket accept() throws IOException
+	{
+		Socket socket = serverSocket.accept();
+		return new TcpSocket(socket);
+	}
 }
