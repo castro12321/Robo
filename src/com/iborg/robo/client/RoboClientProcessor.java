@@ -39,10 +39,11 @@ import com.iborg.robo.RoboProtocol;
  * @version
  */
 
-public class RoboClientProcessor {
+public class RoboClientProcessor
+{
 	private InputStream is;
     private OutputStream os;
-    private RoboClient roboClient;
+    private final RoboClient roboClient;
     public  int width, height;
     private float scaleX, scaleY;
     
@@ -53,50 +54,48 @@ public class RoboClientProcessor {
     private int alphaMask = 0xFF000000;
     
     
-    RoboClientProcessor(ISocket s, RoboClient roboClient) {
-        try {
-            os= s.getOutputStream();
-            is = s.getInputStream();
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-        this.roboClient = roboClient;
-    }
+	RoboClientProcessor(ISocket s, RoboClient roboClient)
+	{
+		this.roboClient = roboClient;
+		try
+		{
+			os = s.getOutputStream();
+			is = s.getInputStream();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace(System.err);
+		}
+	}
     
-    public void run() {
-        
+	
+	public void run()
+	{
         requestScreenParam();
         
-        while(true) {
-            try {
-                int command = is.read();
-                switch(command) {
-                    case RoboProtocol.SCREEN_ADJUSTMENT_END:
-                        screenAdjustmentEnd(true);
-                        break;
-                    case RoboProtocol.SCREEN_RESPONSE_PART:
-                        screenAdjustmentEnd(false);
-                        break;
-                    case RoboProtocol.SCREEN_NOP:
-                        screenNop();
-                        break;
-                    case RoboProtocol.SCREEN_PARAM_RESPONSE:
-                        screenParam();
-                        break;
-                    case RoboProtocol.SCREEN_COLOR_MODEL:
-                        screenColorModel();
-                        break;
-                    case RoboProtocol.CONNECTION_CLOSED:
-                    	roboClient.window.close();
-                    	return;
-                    default:
-                        //System.out.println("unknown command " + command);
-                        break;
+		while(true)
+		{
+			try
+			{
+				int command = is.read();
+				switch(command)
+				{
+				case RoboProtocol.SCREEN_ADJUSTMENT_END: screenAdjustmentEnd(true);  break;
+                case RoboProtocol.SCREEN_RESPONSE_PART:  screenAdjustmentEnd(false); break;
+                case RoboProtocol.SCREEN_NOP:            screenNop();                break;
+                case RoboProtocol.SCREEN_PARAM_RESPONSE: screenParam();              break;
+                case RoboProtocol.SCREEN_COLOR_MODEL:    screenColorModel();         break;
+                case RoboProtocol.CONNECTION_CLOSED:     roboClient.window.close();  return;
+                default:
+                    RoboClient.log("Unknown command " + command);
+                    break;
                 }
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
-                break;
-            }
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace(System.err);
+				break;
+			}
         }
     }
     
@@ -250,12 +249,14 @@ public class RoboClientProcessor {
         
     }
     
-    public void adjustScale() {
-    	// remote size / local size
-    	RoboClientScreenCanvas canvas = roboClient.screenCanvas;
-    	scaleX = (float)width  / (float)canvas.getSize().width;
-    	scaleY = (float)height / (float)canvas.getSize().height;
-    }
+	
+	public void adjustScale()
+	{
+		// remote size / local size
+		RoboClientScreenCanvas canvas = roboClient.screenCanvas;
+		scaleX = (float) width / (float) canvas.getSize().width;
+		scaleY = (float) height / (float) canvas.getSize().height;
+	}
 }
 
 

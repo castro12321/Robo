@@ -34,26 +34,20 @@ public class RoboClient extends Applet
 {
 	private static final long serialVersionUID = 1L;
     
-    RoboClientScreenCanvas screenCanvas;
+	RoboClientScreenCanvas screenCanvas;
     RoboClientProcessor processor;
     RoboClientWindow window;
     
-    // Connection
-    String pass2;
     private ISocket socket;
     
     public RoboClient()
     {
     }
     
-    public void createUserInterface() {
-    	screenCanvas = new RoboClientScreenCanvas(this);
-        window = new RoboClientWindowScalable(this, socket);
-    }
-    
     public void startCapture() {
         processor = new RoboClientProcessor(socket, this);
-        createUserInterface();
+        screenCanvas = new RoboClientScreenCanvas(this);
+        window = new RoboClientWindowScalable(this, socket);
         processor.run();
     }
     
@@ -90,11 +84,8 @@ public class RoboClient extends Applet
     {
     }
     
-    private final static boolean debug = true;
     public static void log(String msg)
     {
-    	if(!debug)
-    		return;
     	System.out.println("[C] " + msg);
     }
     
