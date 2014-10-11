@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.iborg.hsocket.IServerSocket;
-import com.iborg.robo.RoboProtocol;
 import com.iborg.robo.TcpServerSocketFactory;
 import com.iborg.util.ConfigFile;
 
@@ -63,40 +62,30 @@ public class RoboServer
 	public static void main(String args[]) throws AWTException
 	{
 		log("Starting Robo server");
-		String fileName = "Robo.cfg";
-		if(args.length > 0)
-			fileName = args[0];
-		log("Loading config; path=" + fileName);
 		try
 		{
-			ConfigFile.process(fileName);
+			log("Loading config 'Robo.cfg'");
+			ConfigFile.process("Robo.cfg");
 		}
 		catch(IOException ioe)
 		{
-			System.err.println(ioe);
+			ioe.printStackTrace();
 		}
 		
-		// this seems to be neccessary for java.awt.Robot
-		Frame frame = new Frame("RoboServer");
+		// create a robot to feed in GUI events
+		Frame frame = new Frame("RoboServer"); // this seems to be neccessary for java.awt.Robot
 		frame.setVisible(true);
 		frame.dispose();
+		Robot robot = new Robot();
 		
 		// create server socket
-		IServerSocket serverSocket = null;
-		String connectionType = System.getProperty(RoboProtocol.paramConnectionType);
-		log("Preparing server socket with connectionType=" + connectionType);
-		if("tcp".equalsIgnoreCase(connectionType))
-			serverSocket = TcpServerSocketFactory.createServerSocket();
-		else
-			System.err.println("Unknown connection type: " + connectionType);
+		log("Preparing TCP server socket");
+		IServerSocket serverSocket = TcpServerSocketFactory.createServerSocket();
 		
 		if(serverSocket != null)
 		{
 			log("Server socket ready. Starting listener");
-			// create a robot to feed in GUI events
-			Robot robot = new Robot();
-			// listen for connections
-			new RoboServerListener(robot, serverSocket);
+			new RoboServerListener(robot, serverSocket).run();
 		}
 		else
 			log("ERROR: Cannot create serverSocket!");
