@@ -57,7 +57,7 @@ public class RoboClient extends Applet {
     }
     
     public void startLogin() {
-        (new RoboClientLoginProcessor(socket, this)).start();
+        (new RoboClientLoginProcessor(socket, this)).run();
     }
     
     @Override

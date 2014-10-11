@@ -48,7 +48,7 @@ import com.iborg.robo.RoboProtocol;
  * @version
  */
 
-public class RoboClientLoginProcessor extends Thread {
+public class RoboClientLoginProcessor {
 	private InputStream is;
     private OutputStream os;
     private RoboClient roboClient;
