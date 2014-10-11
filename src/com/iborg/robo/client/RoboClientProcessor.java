@@ -39,7 +39,7 @@ import com.iborg.robo.RoboProtocol;
  * @version
  */
 
-public class RoboClientProcessor extends Thread {
+public class RoboClientProcessor {
 	private InputStream is;
     private OutputStream os;
     private RoboClient roboClient;
