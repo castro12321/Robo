@@ -55,7 +55,7 @@ public class RoboClient extends Applet
 	@Override
 	public void start()
 	{
-		log("Starting client...");
+		log("Starting client... v" + RoboProtocol.VERSION);
     	String host = getParameter(RoboProtocol.paramHost);
     	String port = getParameter(RoboProtocol.paramPort);
     	String pass = getParameter(RoboProtocol.paramPassword);

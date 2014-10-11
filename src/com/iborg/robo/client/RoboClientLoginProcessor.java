@@ -24,13 +24,9 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Label;
 import java.awt.Panel;
-import java.awt.TextField;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -54,8 +50,6 @@ public class RoboClientLoginProcessor
 	private final String password;
 	private InputStream is;
     private OutputStream os;
-    private int maxPixels = -1;
-    private int maxUpdateChunk = -1;
     
     
 	RoboClientLoginProcessor(ISocket s, RoboClient roboClient, String password)
@@ -140,20 +134,88 @@ public class RoboClientLoginProcessor
                 //byte[] digest = messageDigest.digest();
                 getMethodParams = null;
                 method = classMessageDigest.getMethod("digest", getMethodParams);
-                byte [] digest = (byte []) method.invoke(messageDigest, (Object)null);
+                byte [] digest = (byte []) method.invoke(messageDigest, (Object[])null);
                 sendLogin(RoboProtocol.LOGIN_MESSAGE_DIGEST, digest);
-                return;
-            } catch (Exception e) {
-                System.err.println(e);
-            }
+				return;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
             sendLogin(RoboProtocol.LOGIN, password.getBytes());
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace(System.err);
+			sendLogin(RoboProtocol.LOGIN, password.getBytes());
+		}
+	}
+    
+    private synchronized void sendLogin(int command, byte [] buffer) {
+        try {
+            os.write(command);
+            DataOutputStream dos = new DataOutputStream(os);
+            dos.writeInt(buffer.length);
+            dos.write(buffer);
+            os.flush();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
-            sendLogin(RoboProtocol.LOGIN, password.getBytes());
         }
-        
     }
     
+    private void loginSuccesful() {
+    	int maxPixels = -1;
+        int maxUpdateChunk = -1;
+        if(maxPixels != -1 || maxUpdateChunk != -1) {
+            try {
+                os.write(RoboProtocol.SCREEN_SET_COM_PARAMS);
+                DataOutputStream dos = new DataOutputStream(os);
+                dos.writeInt(maxPixels);
+                dos.writeInt(maxUpdateChunk);
+                os.flush();
+            } catch (Exception e) {
+            }
+        }
+        roboClient.startCapture();
+    }
+    
+    private void loginFailed() {
+        // create dialog
+        final Dialog dialog = new Dialog(new Frame(), "Login failed", true);
+        Label explanation = new Label("You failed to login. Application is terminating...");
+        Button button = new Button("OK");
+        
+        ActionListener actionListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        };
+        
+        button.addActionListener(actionListener);
+        
+        dialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dialog.dispose();
+            }
+        });
+        
+        Panel panel = new Panel();
+        panel.setLayout(new FlowLayout());
+        panel.add(explanation);
+        panel.add(button);
+        dialog.add(BorderLayout.CENTER, panel);
+        dialog.pack();
+        
+        // position dialog
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenDimension = toolkit.getScreenSize();
+        dialog.setLocation((screenDimension.width - dialog.getSize().width)/2, (screenDimension.height - dialog.getSize().height)/2);
+        
+        dialog.setVisible(true);
+        
+        roboClient.stop();
+    }
+    
+    /* Unused since the parameters are passed in .html file
     private static void centerFrame(Window w) {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenDimension = toolkit.getScreenSize();
@@ -242,66 +304,5 @@ public class RoboClientLoginProcessor
         
         System.out.println("action " + maxUpdateChunk + " " + maxPixels);
     }
-    
-    private synchronized void sendLogin(int command, byte [] buffer) {
-        try {
-            os.write(command);
-            DataOutputStream dos = new DataOutputStream(os);
-            dos.writeInt(buffer.length);
-            dos.write(buffer);
-            os.flush();
-        } catch (Exception e) {
-        }
-    }
-    
-    private void loginSuccesful() {
-        if(maxPixels != -1 || maxUpdateChunk != -1) {
-            try {
-                os.write(RoboProtocol.SCREEN_SET_COM_PARAMS);
-                DataOutputStream dos = new DataOutputStream(os);
-                dos.writeInt(maxPixels);
-                dos.writeInt(maxUpdateChunk);
-                os.flush();
-            } catch (Exception e) {
-            }
-        }
-        roboClient.startCapture();
-    }
-    
-    private void loginFailed() {
-        // create dialog
-        final Dialog dialog = new Dialog(new Frame(), "Login failed", true);
-        Label explanation = new Label("You failed to login. Application is terminating...");
-        Button button = new Button("OK");
-        
-        ActionListener actionListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
-        };
-        
-        button.addActionListener(actionListener);
-        
-        dialog.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                dialog.dispose();
-            }
-        });
-        
-        Panel panel = new Panel();
-        panel.setLayout(new FlowLayout());
-        panel.add(explanation);
-        panel.add(button);
-        dialog.add(BorderLayout.CENTER, panel);
-        dialog.pack();
-        
-        // position dialog
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenDimension = toolkit.getScreenSize();
-        dialog.setLocation((screenDimension.width - dialog.getSize().width)/2, (screenDimension.height - dialog.getSize().height)/2);
-        
-        dialog.setVisible(true);
-        
-        roboClient.stop();
-    }
+    */
 }

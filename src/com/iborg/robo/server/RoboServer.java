@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.iborg.hsocket.IServerSocket;
+import com.iborg.robo.RoboProtocol;
 import com.iborg.robo.TcpServerSocketFactory;
 import com.iborg.util.ConfigFile;
 
@@ -61,7 +62,7 @@ public class RoboServer
 	
 	public static void main(String args[]) throws AWTException
 	{
-		log("Starting Robo server");
+		log("Starting Robo server v" + RoboProtocol.VERSION);
 		try
 		{
 			log("Loading config 'Robo.cfg'");

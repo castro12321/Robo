@@ -39,12 +39,12 @@ public class RoboServerGraphicsProcessor
 	private DeflaterOutputStream adjustmentDeflater;
     private DataOutputStream adjustmentArrayOutputStream;
     
-    private final int kilobyte = 1000;
-    int maxSend = 10*kilobyte;
-	int maxScreenUpdateChunk = 500*kilobyte;
+    int maxSend = 100*1000*1000;
+	int maxScreenUpdateChunk = 500*1000*1000;
     
     synchronized void screen() {
         try {
+        	RoboServer.log("msmsuc " + maxSend + "; " + maxScreenUpdateChunk);
             getPixels();
             analalyzeSend();
         } catch (Exception e) {

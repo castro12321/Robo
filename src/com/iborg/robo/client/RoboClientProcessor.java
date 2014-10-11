@@ -80,12 +80,12 @@ public class RoboClientProcessor
 				int command = is.read();
 				switch(command)
 				{
-				case RoboProtocol.SCREEN_ADJUSTMENT_END: RoboClient.log("SCREEN_ADJUSTMENT_END"); screenAdjustmentEnd(true);  break;
-                case RoboProtocol.SCREEN_RESPONSE_PART:  RoboClient.log("SCREEN_RESPONSE_PART");  screenAdjustmentEnd(false); break;
-                case RoboProtocol.SCREEN_NOP:            RoboClient.log("SCREEN_NOP");            screenNop();                break;
-                case RoboProtocol.SCREEN_PARAM_RESPONSE: RoboClient.log("SCREEN_PARAM_RESPONSE"); screenParam();              break;
-                case RoboProtocol.SCREEN_COLOR_MODEL:    RoboClient.log("SCREEN_COLOR_MODEL");    screenColorModel();         break;
-                case RoboProtocol.CONNECTION_CLOSED:     RoboClient.log("CONNECTION_CLOSED");     roboClient.window.close();  return;
+				case RoboProtocol.SCREEN_ADJUSTMENT_END: screenAdjustmentEnd(true);  break;
+                case RoboProtocol.SCREEN_RESPONSE_PART:  screenAdjustmentEnd(false); break;
+                case RoboProtocol.SCREEN_NOP:            screenNop();                break;
+                case RoboProtocol.SCREEN_PARAM_RESPONSE: screenParam();              break;
+                case RoboProtocol.SCREEN_COLOR_MODEL:    screenColorModel();         break;
+                case RoboProtocol.CONNECTION_CLOSED:     roboClient.window.close();  return;
                 default:
                     RoboClient.log("Unknown command " + command);
                     break;
@@ -196,6 +196,9 @@ public class RoboClientProcessor
         requestScreen();
     }
     
+    // TODO: remove statistics below (lastSend, sentBytes)
+    private long lastSend = System.currentTimeMillis();
+    private int sentBytes = 0;
     private void screenAdjustmentEnd(boolean draw) {
         try {
             DataInputStream dis = new DataInputStream(is);
@@ -203,6 +206,14 @@ public class RoboClientProcessor
             int length = dis.readInt();
             byte [] buffer = new byte[length];
             dis.readFully(buffer);
+            
+            sentBytes += buffer.length + 4;
+            if(System.currentTimeMillis() >= lastSend + 1000)
+            {
+            	RoboClient.log("endRecv sent " + (sentBytes/1000) + " KBytes/s");
+            	lastSend = System.currentTimeMillis();
+            	sentBytes = 0;
+            }
             
             ByteArrayInputStream bis = new ByteArrayInputStream(buffer);
             InflaterInputStream zis = new InflaterInputStream(bis);
