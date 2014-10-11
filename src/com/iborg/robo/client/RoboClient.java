@@ -53,7 +53,7 @@ public class RoboClient extends Applet {
     public void startCapture() {
         processor = new RoboClientProcessor(socket, this);
         createUserInterface();
-        (processor).start();
+        (processor).run();
     }
     
     public void startLogin() {
