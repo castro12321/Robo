@@ -257,7 +257,7 @@ public class RoboClientLoginProcessor
     private void loginSuccesful() {
         if(maxPixels != -1 || maxUpdateChunk != -1) {
             try {
-                os.write(RoboProtocol.SCREEN_SET_COMMUNICATION_PARAMETERS);
+                os.write(RoboProtocol.SCREEN_SET_COM_PARAMS);
                 DataOutputStream dos = new DataOutputStream(os);
                 dos.writeInt(maxPixels);
                 dos.writeInt(maxUpdateChunk);

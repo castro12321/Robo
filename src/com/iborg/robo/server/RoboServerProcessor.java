@@ -95,14 +95,14 @@ public class RoboServerProcessor extends Thread
 			
 			switch(command)
 			{
-                case RoboProtocol.SCREEN_REQUEST: graphicsProcessor.screen(); break;
-                case RoboProtocol.MOUSE_MOVED: mouseMoved(); break;
-                case RoboProtocol.MOUSE_PRESSED: mousePressed(); break;
-                case RoboProtocol.MOUSE_RELEASED: mouseReleased(); break;
-                case RoboProtocol.KEY_PRESSED: keyPressed(); break;
-                case RoboProtocol.KEY_RELEASED: keyReleased(); break;
-                case RoboProtocol.SCREEN_PARAM_REQUEST: sendScreenParam(); break;
-                case RoboProtocol.SCREEN_SET_COMMUNICATION_PARAMETERS: setComParams(); break;
+                case RoboProtocol.SCREEN_REQUEST:        RoboServer.log("SCREEN_REQUEST");        screenRequest();   break;
+                case RoboProtocol.MOUSE_MOVED:           RoboServer.log("MOUSE_MOVED");           mouseMoved();      break;
+                case RoboProtocol.MOUSE_PRESSED:         RoboServer.log("MOUSE_PRESSED");         mousePressed();    break;
+                case RoboProtocol.MOUSE_RELEASED:        RoboServer.log("MOUSE_RELEASED");        mouseReleased();   break;
+                case RoboProtocol.KEY_PRESSED:           RoboServer.log("KEY_PRESSED");           keyPressed();      break;
+                case RoboProtocol.KEY_RELEASED:          RoboServer.log("KEY_RELEASED");          keyReleased();     break;
+                case RoboProtocol.SCREEN_PARAM_REQUEST:  RoboServer.log("SCREEN_PARAM_REQUEST");  sendScreenParam(); break;
+                case RoboProtocol.SCREEN_SET_COM_PARAMS: RoboServer.log("SCREEN_SET_COM_PARAMS"); setComParams();    break;
                 case -1:
                 	RoboServer.log("Got -1 message.");
                     try { Thread.sleep(1000); } catch (Exception e) {}
@@ -119,6 +119,11 @@ public class RoboServerProcessor extends Thread
 		}
 		
 		return true;
+    }
+    
+    private synchronized void screenRequest()
+    {
+    	graphicsProcessor.screen();
     }
     
     private synchronized void sendScreenParam() {

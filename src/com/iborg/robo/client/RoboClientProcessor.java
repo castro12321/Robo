@@ -80,12 +80,12 @@ public class RoboClientProcessor
 				int command = is.read();
 				switch(command)
 				{
-				case RoboProtocol.SCREEN_ADJUSTMENT_END: screenAdjustmentEnd(true);  break;
-                case RoboProtocol.SCREEN_RESPONSE_PART:  screenAdjustmentEnd(false); break;
-                case RoboProtocol.SCREEN_NOP:            screenNop();                break;
-                case RoboProtocol.SCREEN_PARAM_RESPONSE: screenParam();              break;
-                case RoboProtocol.SCREEN_COLOR_MODEL:    screenColorModel();         break;
-                case RoboProtocol.CONNECTION_CLOSED:     roboClient.window.close();  return;
+				case RoboProtocol.SCREEN_ADJUSTMENT_END: RoboClient.log("SCREEN_ADJUSTMENT_END"); screenAdjustmentEnd(true);  break;
+                case RoboProtocol.SCREEN_RESPONSE_PART:  RoboClient.log("SCREEN_RESPONSE_PART");  screenAdjustmentEnd(false); break;
+                case RoboProtocol.SCREEN_NOP:            RoboClient.log("SCREEN_NOP");            screenNop();                break;
+                case RoboProtocol.SCREEN_PARAM_RESPONSE: RoboClient.log("SCREEN_PARAM_RESPONSE"); screenParam();              break;
+                case RoboProtocol.SCREEN_COLOR_MODEL:    RoboClient.log("SCREEN_COLOR_MODEL");    screenColorModel();         break;
+                case RoboProtocol.CONNECTION_CLOSED:     RoboClient.log("CONNECTION_CLOSED");     roboClient.window.close();  return;
                 default:
                     RoboClient.log("Unknown command " + command);
                     break;
@@ -124,7 +124,6 @@ public class RoboClientProcessor
         DataOutputStream dos = new DataOutputStream(os);
         dos.writeInt((int)(x * scaleX));
         dos.writeInt((int)(y * scaleY));
-        
         dos.flush();
     }
     

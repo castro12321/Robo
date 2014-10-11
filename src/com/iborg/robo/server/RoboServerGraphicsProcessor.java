@@ -39,8 +39,9 @@ public class RoboServerGraphicsProcessor
 	private DeflaterOutputStream adjustmentDeflater;
     private DataOutputStream adjustmentArrayOutputStream;
     
-    int maxSend = 100000;
-	int maxScreenUpdateChunk = 500000;
+    private final int kilobyte = 1000;
+    int maxSend = 10*kilobyte;
+	int maxScreenUpdateChunk = 500*kilobyte;
     
     synchronized void screen() {
         try {
@@ -75,7 +76,7 @@ public class RoboServerGraphicsProcessor
             dos.writeInt(greenMask);
             dos.writeInt(blueMask);
             dos.writeInt(alphaMask);
-            
+            RoboServer.log("Sending color model");
             os.flush();
         } catch (Exception e) {
             System.err.println(e);
@@ -151,15 +152,12 @@ public class RoboServerGraphicsProcessor
                 dos.writeInt(stripsSent);
                 
                 adjustmentArrayOutputStream.flush();
-                
                 adjustmentDeflater.finish();
-                
                 adjustmentByteArrayOutputStream.flush();
                 
                 byte [] buffer = adjustmentByteArrayOutputStream.toByteArray();
                 dos.writeInt(buffer.length);
                 os.write(buffer);
-                
                 os.flush();
                 
                 //sendCompare();

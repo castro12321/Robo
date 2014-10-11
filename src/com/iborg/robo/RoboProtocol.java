@@ -34,7 +34,7 @@ public class RoboProtocol {
     public static final int SCREEN_RESPONSE_PART = 5;
     public static final int SCREEN_NOP = 6;
     public static final int SCREEN_COLOR_MODEL = 7;
-    public static final int SCREEN_SET_COMMUNICATION_PARAMETERS = 8;
+    public static final int SCREEN_SET_COM_PARAMS = 8;
 
     public static final int REQUEST_LOGIN = 21;
     public static final int LOGIN_SUCCESSFUL = 22;
