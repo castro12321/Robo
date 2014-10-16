@@ -33,6 +33,7 @@ import java.util.zip.InflaterInputStream;
 
 import com.iborg.hsocket.ISocket;
 import com.iborg.robo.RoboProtocol;
+import com.iborg.robo.server.RoboServerProcessor;
 /**
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -220,7 +221,13 @@ public class RoboClientProcessor
             DataInputStream ois = new DataInputStream(zis);
             
             Toolkit tk = Toolkit.getDefaultToolkit();
-            ColorModel cm = new DirectColorModel(pixelSize, redMask, greenMask, blueMask, alphaMask);
+            
+            ColorModel cm;
+            if(RoboServerProcessor.trueColorQuality)
+            	cm = new DirectColorModel(pixelSize, redMask, greenMask, blueMask, alphaMask);
+            else
+            	cm = new DirectColorModel(16, 0xF800, 0x7E0, 0x1F);
+            
             for(int r=0; r < stripsRecieved; r++) {
                 
                 int x = ois.readInt();
@@ -243,17 +250,38 @@ public class RoboClientProcessor
     private int [] readInts(DataInputStream dis, int length) throws IOException {
         
         int [] ints = new int[length];
-        byte [] b = new byte[length * 4];
-        
+        byte[] b;
+        if(RoboServerProcessor.trueColorQuality)
+        	b = new byte[length * 4];
+        else
+        	b = new byte[length * 2];
+        	
         dis.readFully(b);
         int off = 0;
         for(int i=0; i< length; i++) {
-            ints[i] = ((b[off + 3] & 0xFF) << 0) +
-            ((b[off + 2] & 0xFF) << 8) +
-            ((b[off + 1] & 0xFF) << 16) +
-            ((b[off + 0] & 0xFF) << 24);
-            
-            off += 4;
+        	if(RoboServerProcessor.trueColorQuality)
+        	{
+                ints[i] = 
+                	((b[off + 3] & 0xFF) << 0 ) +
+                    ((b[off + 2] & 0xFF) << 8 ) +
+                    ((b[off + 1] & 0xFF) << 16) +
+                    ((b[off + 0] & 0xFF) << 24);
+                off += 4;
+        	}
+        	else
+        	{
+        		ints[i] =
+    				((b[off + 1] & 0xFF) << 0 ) +
+                    ((b[off + 0] & 0xFF) << 8 );
+        		/*
+        		RoboClient.log(
+        				Integer.toHexString(b[off+0]) + "; " + 
+        				Integer.toHexString(b[off+1])
+        			);
+        		RoboClient.log(Integer.toHexString(ints[i]));
+        		*/
+                off += 2;
+        	}
         }
         return ints;
         

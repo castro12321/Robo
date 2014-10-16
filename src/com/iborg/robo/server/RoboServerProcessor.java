@@ -32,6 +32,7 @@ import com.iborg.robo.RoboProtocol;
 
 public class RoboServerProcessor extends Thread
 {
+	public static boolean trueColorQuality = false;
 	private InputStream is;
 	private OutputStream os;
 	private final Robot robot;
@@ -132,7 +133,6 @@ public class RoboServerProcessor extends Thread
             DataOutputStream dos = new DataOutputStream(os);
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             Dimension screenDimension = toolkit.getScreenSize();
-            // TODO: (Connection speed optimizations) if lowered, will the outbound transfer lower too?
             dos.writeInt(screenDimension.width);
             dos.writeInt(screenDimension.height);
             os.flush();

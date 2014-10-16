@@ -63,6 +63,7 @@ public class RoboServer
 	public static void main(String args[]) throws AWTException
 	{
 		log("Starting Robo server v" + RoboProtocol.VERSION);
+		log("TrueColor quality: " + RoboServerProcessor.trueColorQuality);
 		try
 		{
 			log("Loading config 'Robo.cfg'");

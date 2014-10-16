@@ -25,7 +25,7 @@ package com.iborg.robo;
  */
 
 public class RoboProtocol {
-	public static final int VERSION = 1;
+	public static final int VERSION = 2;
     public static final int PORT = 2356;
     
     public static final int SCREEN_REQUEST = 1;

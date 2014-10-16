@@ -44,7 +44,7 @@ public class RoboServerGraphicsProcessor
     
     synchronized void screen() {
         try {
-        	RoboServer.log("msmsuc " + maxSend + "; " + maxScreenUpdateChunk);
+        	//RoboServer.log("msmsuc " + maxSend + "; " + maxScreenUpdateChunk);
             getPixels();
             analalyzeSend();
         } catch (Exception e) {
@@ -86,6 +86,22 @@ public class RoboServerGraphicsProcessor
 	private void getPixels() throws IOException {
         try {
             image = robot.createScreenCapture(screenRect);
+            
+            /* Just testing. Not needed
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageOutputStream ios = ImageIO.createImageOutputStream(baos);
+            ImageIO.write(image, "GIF", ios);
+            
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            BufferedImage lowQuality = ImageIO.read(bais);
+            RoboServer.log(lowQuality.getColorModel()+"");
+            
+            try { Thread.sleep(15); }
+            catch(InterruptedException e) { e.printStackTrace(); }
+            
+            image = lowQuality;
+            */
+       	 
         } catch (OutOfMemoryError oome) {
             System.err.println("Out of memory while capturing screen");
             Runtime runtime = Runtime.getRuntime();
@@ -169,7 +185,6 @@ public class RoboServerGraphicsProcessor
     }
     
     private synchronized void sendScreenSegment(int x, int y, int w, int h) {
-        
         if(maxSend != -1) {
             if(w * h > maxSend) {
                 int totalSent = 0;
@@ -205,17 +220,58 @@ public class RoboServerGraphicsProcessor
         }
     }
     
+    // Converts 32bit depth (rgba) to 16bit depth (rgb without alpha)
+    private int toLowDepth(int val)
+    {
+    	//val = 0xffffff00; // (r, g, b, a) = (ff, ff, ff, 00)
+    	int r = ((val >> 24) & 0xff) / 8;
+    	int g = ((val >> 16) & 0xff) / 4;
+    	int b = ((val >> 8)  & 0xff) / 8;
+    	//int a = ((val >> 0)  & 0xff);
+    	//RoboServer.log("Original: " + Integer.toBinaryString(val));
+    	//RoboServer.log("r: " + Integer.toBinaryString(r));
+    	//RoboServer.log("g: " + Integer.toBinaryString(g));
+    	//RoboServer.log("b: " + Integer.toBinaryString(b));
+    	int converted = ((r << 11) | (g << 5) | b);
+    	//RoboServer.log("Conv: " + Integer.toBinaryString(converted));
+    	return converted;
+    }
+    
     private void writeInts(int [] ints, int width, int height, int x, int y, int w, int h) throws IOException {
-        byte [] b = new byte[w * h * 4];
-        int off = 0;
+        
+    	byte[] b;
+    	if(RoboServerProcessor.trueColorQuality)
+    		b = new byte[w * h * 4];
+    	else
+    		b = new byte[w * h * 2];
+    	
+    	int off = 0;
         for(int l = 0; l < h; l ++) {
             for(int k = 0; k < w; k ++ ) {
                 int val = ints[(y + l) * width + x + k];
-                b[off + 3] = (byte) (val >>> 0);
-                b[off + 2] = (byte) (val >>> 8);
-                b[off + 1] = (byte) (val >>> 16);
-                b[off + 0] = (byte) (val >>> 24);
-                off += 4;
+                
+                if(RoboServerProcessor.trueColorQuality)
+                {
+                    b[off + 3] = (byte) (val >>> 0);
+                    b[off + 2] = (byte) (val >>> 8);
+                    b[off + 1] = (byte) (val >>> 16);
+                    b[off + 0] = (byte) (val >>> 24);
+                    off += 4;
+                }
+                else
+                {
+                	int lowDepth = toLowDepth(val);
+                	b[off+1] = (byte)(lowDepth >> 0);
+                	b[off+0] = (byte)(lowDepth >> 8);
+                	/*
+                	RoboServer.log(
+                			Integer.toHexString(b[off+0]) + "; " + 
+                			Integer.toHexString(b[off+1])
+                		);
+                	RoboServer.log(Integer.toHexString(lowDepth));
+                	*/
+                	off += 2;
+                }
             }
         }
         adjustmentArrayOutputStream.write(b);
@@ -226,7 +282,6 @@ public class RoboServerGraphicsProcessor
     }
     
     private void sendSegments() {
-        
         Rectangle rectangle = null;
         while(segments.size() > 0) {
             if(rectangle == null) {

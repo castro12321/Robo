@@ -24,6 +24,8 @@ import java.applet.Applet;
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
 import com.iborg.robo.RoboProtocol;
+import com.iborg.robo.server.RoboServer;
+import com.iborg.robo.server.RoboServerProcessor;
 
 /** 
  *
@@ -56,6 +58,7 @@ public class RoboClient extends Applet
 	public void start()
 	{
 		log("Starting client... v" + RoboProtocol.VERSION);
+		log("TrueColor quality: " + RoboServerProcessor.trueColorQuality);
     	String host = getParameter(RoboProtocol.paramHost);
     	String port = getParameter(RoboProtocol.paramPort);
     	String pass = getParameter(RoboProtocol.paramPassword);
