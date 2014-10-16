@@ -223,24 +223,14 @@ public class RoboServerGraphicsProcessor
     int cnt = 0;
     int cnt2 = 0;
     
-    // Converts 32bit depth (rgba) to 16bit depth (rgb without alpha)
+    // Converts 32bit depth (argb) to 16bit depth (rgb without alpha)
     private int toLowDepth(int val)
     {
-    	//val = 0xffffff00; // (r, g, b, a) = (ff, ff, ff, 00)
-    	int r = ((val >> 24) & 0xff) / 8;
-    	int g = ((val >> 16) & 0xff) / 4;
-    	int b = ((val >> 8)  & 0xff) / 8;
-    	//int a = ((val >> 0)  & 0xff);
+    	int r = ((val >> 16) & 0xff) / 8;
+    	int g = ((val >> 8) & 0xff) / 4;
+    	int b = ((val >> 0)  & 0xff) / 8;
     	int converted = ((r << 11) + (g << 5) + b);
     	
-    	if(cnt ++< 20)
-    	{
-        	RoboServer.log("Original: " + Integer.toBinaryString(val));
-        	RoboServer.log("r: " + Integer.toBinaryString(r));
-        	RoboServer.log("g: " + Integer.toBinaryString(g));
-        	RoboServer.log("b: " + Integer.toBinaryString(b));
-        	RoboServer.log("Conv: " + Integer.toBinaryString(converted));
-    	}
     	return converted;
     }
     
