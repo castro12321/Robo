@@ -220,6 +220,9 @@ public class RoboServerGraphicsProcessor
         }
     }
     
+    int cnt = 0;
+    int cnt2 = 0;
+    
     // Converts 32bit depth (rgba) to 16bit depth (rgb without alpha)
     private int toLowDepth(int val)
     {
@@ -228,12 +231,16 @@ public class RoboServerGraphicsProcessor
     	int g = ((val >> 16) & 0xff) / 4;
     	int b = ((val >> 8)  & 0xff) / 8;
     	//int a = ((val >> 0)  & 0xff);
-    	//RoboServer.log("Original: " + Integer.toBinaryString(val));
-    	//RoboServer.log("r: " + Integer.toBinaryString(r));
-    	//RoboServer.log("g: " + Integer.toBinaryString(g));
-    	//RoboServer.log("b: " + Integer.toBinaryString(b));
-    	int converted = ((r << 11) | (g << 5) | b);
-    	//RoboServer.log("Conv: " + Integer.toBinaryString(converted));
+    	int converted = ((r << 11) + (g << 5) + b);
+    	
+    	if(cnt ++< 20)
+    	{
+        	RoboServer.log("Original: " + Integer.toBinaryString(val));
+        	RoboServer.log("r: " + Integer.toBinaryString(r));
+        	RoboServer.log("g: " + Integer.toBinaryString(g));
+        	RoboServer.log("b: " + Integer.toBinaryString(b));
+        	RoboServer.log("Conv: " + Integer.toBinaryString(converted));
+    	}
     	return converted;
     }
     
@@ -263,13 +270,6 @@ public class RoboServerGraphicsProcessor
                 	int lowDepth = toLowDepth(val);
                 	b[off+1] = (byte)(lowDepth >> 0);
                 	b[off+0] = (byte)(lowDepth >> 8);
-                	/*
-                	RoboServer.log(
-                			Integer.toHexString(b[off+0]) + "; " + 
-                			Integer.toHexString(b[off+1])
-                		);
-                	RoboServer.log(Integer.toHexString(lowDepth));
-                	*/
                 	off += 2;
                 }
             }

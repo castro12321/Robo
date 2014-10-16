@@ -222,11 +222,14 @@ public class RoboClientProcessor
             
             Toolkit tk = Toolkit.getDefaultToolkit();
             
-            ColorModel cm;
+            ColorModel cm = new DirectColorModel(pixelSize, redMask, greenMask, blueMask, alphaMask);
+            /*
             if(RoboServerProcessor.trueColorQuality)
             	cm = new DirectColorModel(pixelSize, redMask, greenMask, blueMask, alphaMask);
             else
-            	cm = new DirectColorModel(16, 0xF800, 0x7E0, 0x1F);
+            	//cm = new DirectColorModel(16, 0xF800, 0x7E0, 0x1F);
+            	cm = new DirectColorModel(32, 0xff000000, 0x00ff0000, 0x0000ff00);
+            */
             
             for(int r=0; r < stripsRecieved; r++) {
                 
@@ -270,16 +273,50 @@ public class RoboClientProcessor
         	}
         	else
         	{
+        		int red = ((b[off+0] & 0xFF) >> 3);
+        		int gre = ((b[off+0] & 0x7 ) << 3) + ((b[off+1] & 0xE0) >> 5);
+        		int blu = ( b[off+1] & 0x1F);
+        		
+        		int full = (red << 19) + (gre << 10) + (blu << 3);
+        		//int full = (red << 19) + (gre << 10) + (blu << 3);
+        		//int full = (red << 27) | (gre << 18) | (blu << 11);
+        		//int full = (red << 11) | (gre << 6) | (blu);
+        		ints[i] = full;
+        		
+        		/*
+        		int left = ((b[off+0] & 0x7 )),
+            		righ = ((b[off+1] & 0xE0) >> 5);
+        		*/
+        		/*
+        		int left = ((b[off+0] & 0x7 ) << 5),
+        			righ = ((b[off+1] & 0xFF) >> 5);
+        		*/
+        		
+        		/*
         		ints[i] =
     				((b[off + 1] & 0xFF) << 0 ) +
                     ((b[off + 0] & 0xFF) << 8 );
-        		/*
-        		RoboClient.log(
-        				Integer.toHexString(b[off+0]) + "; " + 
-        				Integer.toHexString(b[off+1])
-        			);
-        		RoboClient.log(Integer.toHexString(ints[i]));
         		*/
+        		
+        		if(cnt++ < 20)
+        		{
+        			RoboClient.log("f: " + Integer.toHexString(ints[i]));
+        			//RoboClient.log("r: " + Integer.toBinaryString(red));
+        			//RoboClient.log("g: " + Integer.toBinaryString(gre) + " ? " + Integer.toBinaryString(left) + ":" + Integer.toBinaryString(righ));
+        			//RoboClient.log("b: " + Integer.toBinaryString(blu));
+        			/*
+        			RoboClient.log("\n\ntest:");
+        			RoboClient.log(Integer.toHexString(ints[i]));
+        			*/
+        			/*
+        			RoboClient.log("Got: " + Integer.toBinaryString(b1) + ":" + Integer.toBinaryString(b0));
+            		RoboClient.log("\n" +
+            				Integer.toBinaryString(b[off+0]) + "; " + 
+            				Integer.toBinaryString(b[off+1])
+            			);
+            		RoboClient.log(Integer.toBinaryString(ints[i]));
+            		*/
+        		}
                 off += 2;
         	}
         }
@@ -287,6 +324,7 @@ public class RoboClientProcessor
         
     }
     
+    int cnt = 0;
 	
 	public void adjustScale()
 	{

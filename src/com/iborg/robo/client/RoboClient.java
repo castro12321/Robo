@@ -24,7 +24,6 @@ import java.applet.Applet;
 import com.iborg.hsocket.ISocket;
 import com.iborg.hsocket.TcpSocket;
 import com.iborg.robo.RoboProtocol;
-import com.iborg.robo.server.RoboServer;
 import com.iborg.robo.server.RoboServerProcessor;
 
 /** 
