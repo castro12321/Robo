@@ -39,28 +39,41 @@ import com.iborg.util.ConfigFile;
  */
 public class RoboServer
 {
-	
 	private static PrintWriter logger = null;
+	static
+	{
+		try
+		{
+			logger = new PrintWriter(new BufferedWriter(new FileWriter("RoboServerLog", true)));
+		}
+		catch(IOException e)
+		{
+			log("[S] ERROR: Cannot open/create RoboServerLog file");
+		}
+	}
+	
+	public static void log(Exception e)
+	{
+		e.printStackTrace();
+		if(logger != null)
+		{
+			logger.println("[S] ERROR EXCEPTION:");
+			e.printStackTrace(logger);
+		}
+	}
 	
 	public static void log(String msg)
 	{
 		System.out.println("[S] " + msg);
-		try
+		if(logger != null)
 		{
-    		if(logger == null)
-    			logger = new PrintWriter(new BufferedWriter(new FileWriter("RoboServerLog", true)));
-    		if(logger != null)
-    		{
-        		logger.println("[S] " + msg);
-    		    logger.close();
-    		}
-		} catch (IOException e) {
-			System.out.println("[S] ERROR: Cannot write to the log file");
+    		logger.println("[S] " + msg);
+		    logger.flush();
 		}
 	}
 	
 	
-	public static void main(String args[]) throws AWTException
+	public static void main(String args_unused[]) throws AWTException
 	{
 		log("Starting Robo server v" + RoboProtocol.VERSION);
 		log("TrueColor quality: " + RoboServerProcessor.trueColorQuality);
@@ -71,7 +84,7 @@ public class RoboServer
 		}
 		catch(IOException ioe)
 		{
-			ioe.printStackTrace();
+			log(ioe);
 		}
 		
 		// create a robot to feed in GUI events

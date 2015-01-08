@@ -25,7 +25,9 @@
 
 package com.iborg.robo;
 import java.io.*;
+
 import com.iborg.hsocket.*;
+import com.iborg.robo.server.RoboServer;
 /** 
  *
  * @author  <a href="mailto:sanych@comcast.net">Boris Galinsky</a>.
@@ -42,12 +44,13 @@ public class TcpServerSocketFactory {
             } catch (Exception e) {
             }
         }
-        System.out.println("TcpServerSocketFactory " + port);
+        RoboServer.log("TcpServerSocketFactory " + port);
+        
         IServerSocket serverSocket = null;
         try {
             serverSocket = new TcpServerSocket(port);
         } catch (IOException ioe) {
-            System.err.println(ioe);
+            RoboServer.log(ioe);
         }
         return serverSocket;
     }

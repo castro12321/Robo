@@ -72,7 +72,7 @@ public class RoboClient extends Applet
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			log(e);
 		}
     }
     
@@ -84,6 +84,11 @@ public class RoboClient extends Applet
     @Override
     public void stop()
     {
+    }
+    
+    public static void log(Exception e)
+    {
+    	e.printStackTrace();
     }
     
     public static void log(String msg)

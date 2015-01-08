@@ -1,4 +1,5 @@
 /*  
+
  *  Copyright (C) 2002 iBorg Corporation. All Rights Reserved.
  *  Copyright (C) 2002 Boris Galinsky. All Rights Reserved.
  *
@@ -25,8 +26,8 @@ package com.iborg.robo;
  */
 
 public class RoboProtocol {
-	public static final int VERSION = 3;
-    public static final int PORT = 2356;
+	public static final int VERSION = 4;
+    public static final int PORT = 5000;
     
     public static final int SCREEN_REQUEST = 1;
     public static final int SCREEN_PARAM_REQUEST = 2;
@@ -53,9 +54,6 @@ public class RoboProtocol {
 
 	public static final String paramPassword = "robo.password";
 	public static final String paramConnectionType = "robo.connectionType";
-	public static final String paramConnectionURL = "robo.connectionURL";
-	public static final String paramAcceptToken = "robo.acceptToken";
-	public static final String paramSetDefaultHostnameVerifier = "robo.setDefaultHostnameVerifier";
 	public static final String paramHost = "robo.host";
 	public static final String paramPort = "robo.port";
 

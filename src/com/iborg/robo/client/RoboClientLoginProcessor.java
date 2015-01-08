@@ -63,7 +63,7 @@ public class RoboClientLoginProcessor
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			RoboClient.log(e);
 		}
 	}
     
@@ -140,7 +140,7 @@ public class RoboClientLoginProcessor
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				RoboClient.log(e);
 			}
             sendLogin(RoboProtocol.LOGIN, password.getBytes());
 		}

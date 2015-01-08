@@ -71,7 +71,7 @@ public class RoboServerListener
 		catch(Exception e)
 		{
 			System.err.println(e);
-			e.printStackTrace();
+			RoboServer.log(e);
 		}
 	}
 }

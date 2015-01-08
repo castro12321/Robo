@@ -109,7 +109,7 @@ public class RoboServerProcessor extends Thread
                     try { Thread.sleep(1000); } catch (Exception e) {}
                     break;
                 default:
-                    System.err.println("unknown command " + command);
+                    RoboServer.log("unknown command " + command);
                     return true;
 			}
 		}

@@ -103,9 +103,10 @@ public class RoboServerGraphicsProcessor
             */
        	 
         } catch (OutOfMemoryError oome) {
-            System.err.println("Out of memory while capturing screen");
+        	// The memory here should be freed (the image inside the try caused OutOfMemory.
+        	RoboServer.log("Out of memory while capturing screen");
             Runtime runtime = Runtime.getRuntime();
-            System.err.println("Total memory = " + runtime.totalMemory() + " free memory = " + runtime.freeMemory());
+            RoboServer.log("Total memory = " + runtime.totalMemory() + " free memory = " + runtime.freeMemory());
         }
         if(image != null) {
             if(newScreen == -1) {
