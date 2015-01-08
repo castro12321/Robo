@@ -48,8 +48,7 @@ public class RoboServerGraphicsProcessor
             getPixels();
             analalyzeSend();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
 	
@@ -79,7 +78,7 @@ public class RoboServerGraphicsProcessor
             RoboServer.log("Sending color model");
             os.flush();
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
 	
@@ -180,7 +179,7 @@ public class RoboServerGraphicsProcessor
                 //sendCompare();
                 
             } catch (Exception e) {
-                System.err.println(e);
+            	RoboServer.log(e);
             }
         }
     }
@@ -358,7 +357,7 @@ public class RoboServerGraphicsProcessor
             os.write(RoboProtocol.SCREEN_NOP);
             os.flush();
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
 }

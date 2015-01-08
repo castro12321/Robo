@@ -48,7 +48,7 @@ public class RoboServerProcessor extends Thread
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 		}
 		
 		graphicsProcessor = new RoboServerGraphicsProcessor(os, robot);
@@ -115,7 +115,7 @@ public class RoboServerProcessor extends Thread
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 			return false;
 		}
 		
@@ -137,7 +137,7 @@ public class RoboServerProcessor extends Thread
             dos.writeInt(screenDimension.height);
             os.flush();
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
     
@@ -168,7 +168,7 @@ public class RoboServerProcessor extends Thread
         try {
             robot.keyPress(key);
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
     
@@ -178,7 +178,7 @@ public class RoboServerProcessor extends Thread
         try {
             robot.keyRelease(key);
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboServer.log(e);
         }
     }
     

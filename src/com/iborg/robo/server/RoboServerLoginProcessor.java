@@ -70,7 +70,7 @@ public class RoboServerLoginProcessor
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 		}
 		
 		return loggedIn;
@@ -91,7 +91,7 @@ public class RoboServerLoginProcessor
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 		}
 	}
 	
@@ -106,7 +106,7 @@ public class RoboServerLoginProcessor
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 		}
 	}
 	
@@ -121,7 +121,7 @@ public class RoboServerLoginProcessor
 		}
 		catch(Exception e)
 		{
-			System.err.println(e);
+			RoboServer.log(e);
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class RoboServerLoginProcessor
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace(System.err);
+				RoboServer.log(e);
 				return false;
 			}
 		}

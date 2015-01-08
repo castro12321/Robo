@@ -65,7 +65,7 @@ public class RoboClientProcessor
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace(System.err);
+			RoboClient.log(e);
 		}
 	}
     
@@ -94,7 +94,7 @@ public class RoboClientProcessor
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace(System.err);
+				RoboClient.log(e);
 				break;
 			}
         }
@@ -106,7 +106,7 @@ public class RoboClientProcessor
             os.write(RoboProtocol.SCREEN_PARAM_REQUEST );
             os.flush();
         } catch (Exception e) {
-            System.err.println(e);
+            RoboClient.log(e);
         }
     }
     
@@ -116,7 +116,7 @@ public class RoboClientProcessor
             os.write(RoboProtocol.SCREEN_REQUEST);
             os.flush();
         } catch (Exception e) {
-            System.err.println(e);
+        	RoboClient.log(e);
         }
     }
     
@@ -173,7 +173,7 @@ public class RoboClientProcessor
             adjustScale();
             requestScreen();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+        	RoboClient.log(e);
         }
     }
     
@@ -185,7 +185,7 @@ public class RoboClientProcessor
             blueMask = dis.readInt();
             alphaMask = dis.readInt();
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            RoboClient.log(e);
         }
     }
     
@@ -243,7 +243,7 @@ public class RoboClientProcessor
                 roboClient.screenCanvas.imageGraphics.drawImage(image, x, y, null);
             }
         } catch (Exception e) {
-            e.printStackTrace(System.err);
+            RoboClient.log(e);
         }
         
         if(draw)
